@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Анализ интервью — потерянные коммерческие возможности в home services</title>
+  <style>
+    :root{--ink:#172033;--muted:#5d6678;--line:#dce2eb;--paper:#fff;--wash:#f5f7fb;--blue:#2357d8;--green:#147d64;--amber:#a65a00;--red:#b12a34}*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.58 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}main{max-width:1080px;margin:28px auto;padding:42px;background:var(--paper);box-shadow:0 8px 30px #26355218;border-radius:16px}h1{font-size:2.1rem;line-height:1.15;margin:.3em 0}h2{margin-top:2.2em;border-top:1px solid var(--line);padding-top:1em}h3{margin-top:1.7em}h4{margin-bottom:.35em}a{color:var(--blue)}.attr,.muted,small{color:var(--muted)}.attr{font-size:.92rem}.warning{border-left:5px solid var(--amber);background:#fff8e8;padding:12px 16px;margin:12px 0}.verdict{background:#edf5ff;border:1px solid #c9dcff;padding:18px;border-radius:12px}.good{color:var(--green);font-weight:700}.hyp{color:var(--amber);font-weight:700}.bad{color:var(--red);font-weight:700}blockquote{margin:12px 0;padding:10px 16px;border-left:4px solid #8ba8ef;background:#f5f8ff}table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;margin:14px 0}th,td{border:1px solid var(--line);padding:9px 11px;vertical-align:top;text-align:left}th{background:#eef2f8}code{background:#eef2f8;padding:.15em .35em;border-radius:4px}details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}summary{cursor:pointer;font-weight:700}nav{background:#f4f7fc;padding:14px 18px;border-radius:10px}nav a{margin-right:13px}.tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin:2px;font-size:.86rem}.job{border-left:4px solid var(--blue);padding:9px 14px;background:#f7f9ff}.footer{margin-top:42px;padding-top:18px;border-top:1px solid var(--line)}@media(max-width:700px){main{margin:0;padding:22px;border-radius:0}h1{font-size:1.65rem}}
+  </style>
+</head>
+<body><main>
+  <p class="attr"><strong>Методология: Ivan Zamesin / <a href="https://nextmovetheory.com/?utm_source=nmt-analyze-interviews&amp;utm_medium=skill-artifact" target="_blank" rel="noopener">Next Move Theory</a>.</strong> Отчёт создан с помощью навыка <code>nmt-analyze-interviews</code>.</p>
+  <div class="warning"><strong>⚠️ Числовой дисклеймер.</strong> Каждый уровень уверенности, размер сегмента и оценка бюджета Job здесь — оценка LLM по интервью, включая сами оценки уверенности. Это чтение силы данных, а не измерение. Проверяйте перед дорогим решением.</div>
+  <div class="warning"><strong>⚠️ Дисклеймер о галлюцинациях.</strong> Документ сгенерирован LLM и может содержать галлюцинации в неизвестных местах, включая Jobs, которые респондент не выражал. Перед решениями с дорогими последствиями перечитайте якорные цитаты и проведите подтверждающие интервью; не действуйте только на основании этого документа.</div>
+
+  <h1>Какие сегменты скрыты в 6 интервью с home-service компаниями</h1>
+  <p class="muted">Задача: найти Job-based сегменты и выбрать сегмент для следующего шага в <code>$nmt-craft-value-proposition</code> · режим Quick · 10 августа 2026</p>
+  <nav><a href="#verdict">Вердикт</a><a href="#quality">Качество</a><a href="#segments">Сегменты</a><a href="#solutions">Решения</a><a href="#consideration">Выбор</a><a href="#value">Гипотезы ценности</a><a href="#appendix">По интервью</a><a href="#next">Что дальше</a></nav>
+
+  <section id="verdict">
+    <h2>Что говорят ваши интервью — сначала прочитайте это</h2>
+    <div class="verdict">
+      <p><strong>Могут ли интервью решить задачу «найти сегменты и выбрать один для value proposition»?</strong> <strong>Частично.</strong> Они уверенно показывают, что под одной формулировкой «не терять сделки после estimate» существуют как минимум три несовместимых порядка критериев. Но ни один кластер ещё не насыщен, а экономика и Big Jobs раскрыты слабо.</p>
+      <p><strong>Лучший кандидат для передачи дальше:</strong> <em>доказательный контроль следующего действия</em> — респонденты №1 и №2. Это <span class="hyp">погранично развивающийся сегмент</span>: вес 1,32, высокая согласованность, насыщение — нет. Его можно передать в <code>$nmt-craft-value-proposition</code> как рабочую гипотезу с явным validation debt, но не как подтверждённый сегмент.</p>
+      <p><strong>Более безопасный маршрут:</strong> сначала провести ещё 2–3 интервью с тем же screener и подтвердить точность-first порядок, допустимый false-positive rate, SLA обнаружения и бюджет; затем запускать value proposition.</p>
+    </div>
+    <h3>Сегменты, которые проявились</h3>
+    <ul>
+      <li><strong>Доказательный контроль следующего действия — погранично развивающийся:</strong> точное доказательство и доверие команды важнее автоматического outreach. <q>Мне нужен конкретный звонок или сообщение, конкретное обещание и доказательство, что следующего действия нет</q> — №2.</li>
+      <li><strong>Автоматический follow-up без ручного выбора — гипотеза:</strong> получить касание в первые 24 часа важнее идеальной интерпретации и отсутствия лишних сообщений. <q>Если она иногда отправит лишнее сообщение — переживём</q> — №3.</li>
+      <li><strong>Доказательный coaching по повторяющимся паттернам — гипотеза:</strong> полнота картины за месяц важнее мгновенного alert по лиду. <q>Мне не нужно возвращать конкретный лид сегодня</q> — №5.</li>
+    </ul>
+    <p><strong>Главный риск данных:</strong> только два интервью поддерживают лучший кластер, все четыре пригодных интервью имеют лишь среднюю уверенность, а интервью №4 и предложенная AI/$500 часть №6 основаны на будущем намерении и не дают веса сегментам.</p>
+  </section>
+
+  <section id="quality">
+    <h2>1. Качество данных</h2>
+    <ul>
+      <li><strong>Файлов/интервью:</strong> 6. Частичные AJTBD: 4; non-AJTBD: 2.</li>
+      <li><strong>Уверенность:</strong> Clean — 0; Directional — 4 (#1, #2, #3, #5); Weak — 1 (#6, только эпизод с отпуском); Not usable — 1 (#4) плюс AI/$500-гипотеза из #6.</li>
+      <li><strong>Для выбранной задачи:</strong> данных достаточно, чтобы разделить конфликтующие сегменты и выбрать лидирующую гипотезу; недостаточно, чтобы объявить её Solid или оценить размер, willingness-to-pay и unit economics.</li>
+    </ul>
+    <p><strong>Шкала расчёта:</strong> Clean = 1,0; Directional = 0,66; Weak = 0,33; Not usable = 0. Для этой малой выборки: Solid — ≥3,0 при когерентности и насыщении; Emerging — ≥1,25 при двух независимых согласованных интервью; Hypothesis — ниже 1,25, один респондент или слабая когерентность. Порог 1,25 позволяет назвать кластер №1 погранично Emerging, но отсутствие насыщения не позволяет считать его подтверждённым.</p>
+  </section>
+
+  <section id="segments">
+    <h2>2. Сегменты по Core Jobs</h2>
+    <table><thead><tr><th>Сегмент</th><th>Core Job — кратко</th><th>Доминирующий порядок критериев</th><th>Поддержка</th><th>Уверенность</th></tr></thead><tbody>
+      <tr><td><strong>A. Доказательный контроль следующего действия</strong></td><td>Доказуемо выявлять возможности без назначенного следующего действия</td><td>Доказательность → доверие команды → встраивание/своевременность → автоматизация</td><td>#1 Directional + #2 Directional = 1,32</td><td>Погранично Emerging; coherence высокая, saturation нет</td></tr>
+      <tr><td><strong>B. Автоматический follow-up без ручного выбора</strong></td><td>Автоматически запускать последовательность после estimate</td><td>Полнота и ≤24 часа → отсутствие ручного решения → точность</td><td>#3 Directional = 0,66</td><td>Hypothesis</td></tr>
+      <tr><td><strong>C. Coaching по повторяющимся паттернам</strong></td><td>Видеть повторяющиеся паттерны поведения каждого менеджера</td><td>Полнота месяца → доказательства → снижение review 5–6 ч до ~1 ч → мгновенность</td><td>#5 Directional = 0,66</td><td>Hypothesis</td></tr>
+      <tr><td><strong>D. Непрерывность владения при отсутствии сотрудника</strong></td><td>Сохранять заявку видимой и доступной для подхвата</td><td>Не извлечён</td><td>#6 Weak = 0,33</td><td>Слабая гипотеза, не передавать дальше</td></tr>
+    </tbody></table>
+
+    <h3>A. Доказательный контроль следующего действия — погранично Emerging</h3>
+    <p><strong>Уверенность:</strong> вес 1,32; №1 (Directional) + №2 (Directional). Критерии и порядок хорошо совпадают, но новые интервью ещё не перестали добавлять критерии.</p>
+    <p><strong>Персона — причинные критерии:</strong> компания проводит продажу через несколько ролей и систем; обещания остаются в звонках/сообщениях, а исполняемые задачи — в FSM/CRM; руководитель уже оплачивает инструменты и регулярно тратит управленческое время на ручной аудит; ложный сигнал создаёт социальную цену — несправедливое обвинение менеджера и отказ команды пользоваться системой.</p>
+    <ul>
+      <li>Есть несколько точек передачи ответственности между CSR/dispatcher, advisor/продажником и руководителем — это создаёт разрывы.</li>
+      <li>Звонки/сообщения и next actions живут в разных источниках — требуется проверяемая связка.</li>
+      <li>Руководитель уже выполняет аудит 2–4 часа в неделю — Job подтверждён расходом времени.</li>
+      <li>Команда не принимает шумные alerts — precision и provenance определяют adoption.</li>
+      <li>Сигнал должен попадать в существующий workflow; отдельный dashboard добавляет Tax Job.</li>
+    </ul>
+    <div class="job"><strong>Core Job:</strong> Когда коммерческая возможность проходит через несколько сотрудников и систем, а обещанное продолжение может не превратиться в задачу, <strong>я хочу доказуемо выявлять возможности без конкретного следующего действия</strong>, сначала подтверждая исходный разговор/сообщение, обещание и отсутствие действия, затем возвращая пропуск в текущий workflow достаточно рано, чтобы команда могла продолжить продажу, <strong>чтобы</strong> управлять pipeline на фактах и не терять жизнеспособные продажи в разрывах передачи ответственности.</div>
+    <p><strong>Big Jobs — гипотезы, не laddered:</strong> управлять продажами на согласованных фактах; сохранять предсказуемость и управляемость выручки.</p>
+    <blockquote>«Мне было важнее не скорость автоматизации, а чтобы я мог доверять данным» — №1.</blockquote>
+    <blockquote>«Главное — чтобы система не обвиняла менеджера зря» — №2.</blockquote>
+
+    <h3>B. Автоматический follow-up без ручного выбора — Hypothesis</h3>
+    <p><strong>Персона — причинные критерии:</strong> большой поток лидов с относительно невысоким средним чеком делает ручную приоритизацию невыгодной; компания готова принять отдельные лишние касания ради полноты и скорости; готовые workflows важнее тонкой интерпретации.</p>
+    <div class="job"><strong>Core Job:</strong> Когда estimate отправлен в поточном процессе, <strong>я хочу автоматически запускать последовательность follow-up</strong> так, чтобы первое касание произошло в течение 24 часов, цепочка SMS → звонок → SMS продолжалась до ответа/отказа и менеджер не выбирал лиды вручную, <strong>чтобы</strong> не терять доступные продажи из-за отсутствия своевременного контакта.</div>
+    <p><strong>Big Job:</strong> не терять доступные продажи из-за отсутствия контакта — рабочая гипотеза. Поддержка: только №3.</p>
+
+    <h3>C. Доказательный coaching по повторяющимся паттернам — Hypothesis</h3>
+    <p><strong>Персона — причинные критерии:</strong> руководитель отвечает за performance нескольких менеджеров; разговоры распределены по источникам; решение принимается на уровне повторяющегося поведения за месяц, а не отдельного лида; каждое заключение должно иметь доказательства.</p>
+    <div class="job"><strong>Core Job:</strong> Когда менеджеры продают с разными результатами, а evidence распределён по звонкам и ручным таблицам, <strong>я хочу видеть повторяющиеся паттерны поведения каждого менеджера</strong>, получая полную картину за месяц, доказательства по каждому паттерну и сокращая review с 5–6 часов примерно до часа в неделю, <strong>чтобы</strong> объяснять и улучшать performance команды.</div>
+    <p><strong>Big Job:</strong> улучшать/управлять performance команды — гипотеза. Поддержка: только №5.</p>
+  </section>
+
+  <section id="solutions">
+    <h2>3. Что используют сегодня и где это ломается</h2>
+    <table><thead><tr><th>Сегмент</th><th>Solution и устанавливаемый подграф</th><th>Job → Solution → Problem</th></tr></thead><tbody>
+      <tr><td>A</td><td><strong>ServiceTitan (+ CallRail)</strong>: принять/атрибутировать звонок → передать лид → отправить estimate → записать статус → назначить follow-up.</td><td>Сохранить конкретный следующий шаг → FSM/CRM + ручная запись → estimate остаётся, но обещание не становится датированной задачей; обнаружение через неделю/три недели.</td></tr>
+      <tr><td>A</td><td><strong>DIY-аудит</strong>: выгрузить estimates → найти записи без действия → спросить менеджеров → вернуть в работу.</td><td>Получить достоверную картину → еженедельный ручной аудит → 2–4 часа управленческого времени, включая недели без находок.</td></tr>
+      <tr><td>B</td><td><strong>Google Sheets + CSR</strong>: занести → помнить срок → выбрать контакт → написать → обновить статус.</td><td>Обеспечить follow-up → таблица и память → каждый день кто-то забывает написать.</td></tr>
+      <tr><td>B</td><td><strong>Hatch</strong>: событие estimate → готовый workflow → SMS/звонки → остановка после ответа/отказа.</td><td>Явных текущих Problems не извлечено; выбран за скорость запуска готовых workflows.</td></tr>
+      <tr><td>C</td><td><strong>Rilla + ручная таблица</strong>: слушать → отмечать behaviors → агрегировать по менеджеру → искать паттерны.</td><td>Понять повторяющиеся паттерны → частичный call intelligence + ручная сборка → 5–6 часов в неделю и неполная автоматическая картина.</td></tr>
+      <tr><td>D</td><td><strong>Общий email inbox</strong>: централизовать заявки → дать нескольким сотрудникам видимость → подхватить.</td><td>Сохранить владение при отсутствии сотрудника → индивидуальный handoff до внедрения inbox → сотрудник ушёл в отпуск, никто не перезвонил. Текущий Problem inbox не назван.</td></tr>
+    </tbody></table>
+  </section>
+
+  <section id="consideration">
+    <h2>4. Что взвешивали перед выбором</h2>
+    <h3>A — доказательность прежде автоматизации</h3>
+    <ul><li><strong>Знали:</strong> память команды, ServiceTitan, Housecall Pro, CallRail, ручной audit.</li><li><strong>Сравнивали:</strong> доверие к данным против скорости автоматизации; доказательство против необъяснимого alert; существующий workflow против отдельного dashboard.</li><li><strong>Названные продукты и вход:</strong> ServiceTitan, Housecall Pro, CallRail; конкретный entry path не раскрыт.</li><li><strong>Страхи:</strong> мусорные alerts, ложное обвинение менеджера, прекращение использования командой, ещё одно место для проверки.</li><li><strong>Чтобы переключиться:</strong> увидеть исходный звонок/сообщение, точное обещание, отсутствие исполняемого действия и безопасное создание задачи в текущем FSM/CRM.</li></ul>
+    <h3>B — полнота и скорость прежде precision</h3>
+    <ul><li><strong>Знали:</strong> Google Sheets/CSR, Hatch, Podium.</li><li><strong>Сравнивали:</strong> готовые workflows и скорость запуска; ручное решение менеджера отвергнуто.</li><li><strong>Страх:</strong> отсутствие любого follow-up в первые 24 часа; лишнее сообщение допустимо.</li></ul>
+    <h3>C — месячная полнота прежде мгновенности</h3>
+    <ul><li><strong>Знали:</strong> Rilla, ручное прослушивание и таблица. Другие альтернативы не извлечены.</li><li><strong>Сравнивали:</strong> отдельный лид сегодня против доказанного повторяющегося паттерна за месяц.</li><li><strong>Страх:</strong> вывод о менеджере без supporting evidence; это пока подразумеваемый, а не полноценно исследованный страх.</li></ul>
+  </section>
+
+  <section id="value">
+    <h2>5. Гипотезы создания ценности</h2>
+    <p>Это направления механик, а не список функций. Конкретный продукт и strongest/fastest/cheapest delivery должен разработать <code>$nmt-craft-value-proposition</code>.</p>
+    <table><thead><tr><th>Сегмент</th><th>Недообслуженное пересечение критериев</th><th>Направление механики</th><th>Самый рискованный допуск</th></tr></thead><tbody>
+      <tr><td>A — рекомендуемый</td><td>Высокий precision + аудируемое доказательство + задача внутри существующего workflow + обнаружение до потери сделки</td><td><strong>Убрать ручной Job аудита</strong> и <strong>исправить разрыв цепочки</strong>: сопоставлять обещание из коммуникации с реальным next action, а подтверждённый пропуск возвращать в FSM/CRM.</td><td>Можно достичь precision, при котором команда доверяет сигналам, не пропуская достаточно дорогих возможностей.</td></tr>
+      <tr><td>B</td><td>Follow-up ≤24 часов + полное покрытие + отсутствие ручного выбора</td><td><strong>Снять Job с менеджера</strong>: автоматически исполнять последовательность до ответа/отказа.</td><td>Сегмент действительно допускает лишние сообщения и риски бренда/consent ради полноты.</td></tr>
+      <tr><td>C</td><td>Полная месячная картина + доказательство каждого паттерна + review ≈1 час</td><td><strong>Убрать ручную агрегацию</strong>: собирать evidence в повторяющиеся паттерны на уровне менеджера.</td><td>Выявленные паттерны меняют coaching и продажи, а не только экономят время анализа.</td></tr>
+    </tbody></table>
+  </section>
+
+  <section id="appendix">
+    <h2>6. Приложение по каждому интервью</h2>
+    <details><summary>#1 · HVAC owner — Directional, служит задаче</summary><p><strong>Извлечено:</strong> доказуемо контролировать наличие следующего действия; конкретная потеря ~$14 000; ServiceTitan vs Housecall Pro; DIY-аудит ~2 ч/нед.; доверие важнее скорости; existing workflow важнее dashboard.</p><p><strong>Нет:</strong> целевого false-positive threshold, SLA обнаружения, подтверждённого Big Job, эмоций, WTP и recovery rate.</p><blockquote>«Если система показывает много мусора, люди просто перестают смотреть».</blockquote></details>
+    <details><summary>#2 · Plumbing GM — Directional, служит задаче</summary><p><strong>Извлечено:</strong> доказуемо выявлять opportunity без dated next action; ServiceTitan + CallRail; DIY-аудит 3–4 ч/нед.; конкретный repipe-эпизод; цена ложного обвинения; 7/10 ложных alerts неприемлемы.</p><p><strong>Нет:</strong> целевого precision, SLA, цены потерянного лида, истории выбора решений, Big Job и решения detect-only vs act.</p><blockquote>«Главное — чтобы система не обвиняла менеджера зря».</blockquote></details>
+    <details><summary>#3 · Electrical owner — Directional, служит задаче как отдельный сегмент</summary><p><strong>Извлечено:</strong> автоматически запустить SMS → звонок → SMS после estimate; Hatch vs Podium vs Sheets; первое касание ≤24 ч; отдельное лишнее сообщение допустимо; готовые workflows важнее точности.</p><p><strong>Нет:</strong> конкретного purchase trigger, частоты/бюджета, Big Job, Problems Hatch, Aha Moment и измеренного sales uplift.</p><blockquote>«Гораздо хуже, когда клиент вообще не получает follow-up в первые 24 часа».</blockquote></details>
+    <details><summary>#4 · знакомый HVAC owner — Not usable</summary><p>Нет прошлого расхода, собственного эпизода или конкретной потери. AI и dashboard — future intent/Fake Job, не находка. Сохраняются лишь слабые гипотезы языка: «где менеджер забыл клиента» и денежная оценка потерь.</p><blockquote>«Наверное, мы что-то теряем, хотя конкретный случай сейчас не вспомню».</blockquote></details>
+    <details><summary>#5 · HVAC sales manager — Directional, служит как отдельный сегмент</summary><p><strong>Извлечено:</strong> повторяющиеся паттерны по менеджеру; полнота месяца важнее alert; Rilla + ручная таблица; 5–6 ч/нед. → желаемый ~1 ч; evidence по каждому паттерну.</p><p><strong>Нет:</strong> Big Job/emotions, альтернативы, purchase episode, WTP, Aha и доказательство влияния coaching на продажи.</p><blockquote>«Для меня важнее полнота картины за месяц, чем мгновенный alert».</blockquote></details>
+    <details><summary>#6 · Plumbing owner — Weak для эпизода, Not usable для AI/$500</summary><p>Слабый прошлый эпизод: employee vacation → никто не перезвонил → общий inbox, который используется до сих пор. Нет критериев, частоты, бюджета и Consideration Set. Вопросы про AI и $500 были наводящими; ответы «может быть/возможно» не поддерживают Job или WTP.</p><blockquote>«После этого они сделали общий email inbox».</blockquote></details>
+  </section>
+
+  <section id="next">
+    <h2>7. Пробелы и кого интервьюировать дальше</h2>
+    <h3>Что эти данные пока не отвечают</h3>
+    <ul><li>Какой минимальный precision/максимальный false-positive rate нужен сегменту A?</li><li>За какое время пропуск должен быть обнаружен: часы, день, до следующего pipeline review?</li><li>Должен ли продукт только доказать пропуск, создать задачу или назначить владельца и контролировать исполнение?</li><li>Как часто доказанные пропуски приводят к возвращённой выручке и каков Job budget?</li><li>Как звучит подтверждённый Big Job и личный Job decision maker?</li><li>Есть ли внутри сегмента A разные приоритеты: защита справедливости менеджера vs максимизация возвращённой выручки?</li></ul>
+    <h3>Следующий набор: 2–3 интервью для сегмента A</h3>
+    <p><strong>Past-payment screener:</strong> рекрутировать owner/GM/sales manager, который за последние 6–12 месяцев (1) лично нашёл пропущенное обещанное действие после звонка/estimate; (2) после этого купил/настроил Solution или ввёл регулярный audit; (3) продолжает тратить ≥1 часа управленческого времени в неделю; (4) использует несколько источников коммуникации и FSM/CRM; (5) может показать конкретный эпизод без раскрытия PII.</p>
+    <p>В интервью восстановить последний эпизод open-first: триггер → точное обещание → где оно записалось → где должна была появиться задача → когда и кем найден разрыв → цена → выбранное решение → критерии и trade-offs. Отдельно спросить: «Из 10 сигналов сколько ложных сделают систему бесполезной?» и «Какое доказательство позволит действовать, не перепроверяя всё вручную?»</p>
+    <h3>Рекомендация по hand-off</h3>
+    <p><strong>Передавать дальше:</strong> сегмент A — <em>руководители многоролевого sales process, которые уже вручную аудируют estimates и ставят доказательность выше автоматического outreach</em>. Передать вместе с обязательным validation debt: вес 1,32, только два Directional интервью, Big Job и экономика не подтверждены.</p>
+    <p><strong>Не смешивать с ним:</strong> сегмент B хочет исполнение с высокой полнотой и терпит лишние сообщения; сегмент C покупает месячный coaching insight, а не recovery конкретной сделки. Это разные продукты/ценностные предложения, даже если все используют AI и данные звонков.</p>
+    <p><strong>Решение:</strong> если нужен быстрый exploratory шаг — запускайте <code>$nmt-craft-value-proposition</code> для A с маркировкой «гипотеза, GO только к validation». Если решение дорогое — сначала спроектируйте 2–3 подтверждающих интервью через <code>$nmt-interview-guide</code>, затем передавайте A.</p>
+  </section>
+
+  <footer class="footer attr"><strong>Методология и исходная система:</strong> Ivan Zamesin, Next Move Theory / Advanced Jobs To Be Done. <a href="https://nextmovetheory.com/?utm_source=nmt-analyze-interviews&amp;utm_medium=skill-artifact" target="_blank" rel="noopener">Узнать больше</a>. Отчёт создан с помощью <code>nmt-analyze-interviews</code>; текст не написан и не одобрен Ivan Zamesin.</footer>
+</main></body></html>
