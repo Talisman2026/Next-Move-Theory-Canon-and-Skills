@@ -206,7 +206,7 @@ Per `../PRODUCER-CONTRACT.md`, this chat-first skill applies the contract partia
 - **§3 Input-as-hypothesis — yes:** everything the user reports (metrics, segment beliefs, initiatives) is a claim, not a fact; the diagnosis flags where a "fact" is actually unmeasured, and the current-initiative RAT pass is exactly this gate applied to their plans.
 - **§4 Validation framing — yes** as the per-finding "cheapest validation step"; no separate validation-debt counter unless a file is written.
 - **§2 output format / §5 output path — only when the user asks to save** (then `.md`/`.html` + custom path apply).
-- **§6 Deep-mode QA / web-MCP — N/A by default** (the diagnosis is reasoning over the user's data; web research is the routed skill's job).
+- **§6 Deep-mode QA / Evidence Pack — N/A by default** (the diagnosis is reasoning over the user's data; web research is the routed skill's job).
 
 ---
 
