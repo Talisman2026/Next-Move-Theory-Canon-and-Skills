@@ -16,9 +16,9 @@ user-invocable: true
 
 # Market Research
 
-> **In one breath.** Before any research runs, a short intake closes the gaps that change the research: a few clarifying questions (with "I don't have this info" as a valid answer), any materials you already have read in, your inputs held as hypotheses rather than facts, and a quick direction confirmation. The deliverable is a **decision**: a one-page answer with a **GO (to validation) / NARROW / PIVOT** verdict, the customer segments scored on the four go/no-go questions (the selection screen), the make-or-break risk and how to test it, and **ranked strategic options** (including other markets the same idea could fit). Quick mode sizes honestly (one calculation, assumptions named); the 3-method averaging runs only in Deep mode, on real sources.
+> **In one breath.** Before any research runs, a short intake closes the gaps that change the research: a few clarifying questions (with "I don't have this info" as a valid answer), any materials you already have read in, your inputs held as hypotheses rather than facts, and a quick direction confirmation. The deliverable is a **decision**: a one-page answer with a **GO (to validation) / NARROW / PIVOT** verdict, the customer segments scored on the four go/no-go questions (the selection screen), the make-or-break risk and how to test it, and **ranked strategic options** (including other markets the same idea could fit). Quick mode sizes honestly (one calculation, assumptions named); Deep mode triangulates only genuinely independent evidence and never manufactures methods for symmetry.
 
-> **Producer contract (binding) — `../PRODUCER-CONTRACT.md`.** Six cross-cutting behaviors shared by all producer skills, from user feedback: (1) print a **helicopter-view** before the first question; (2) ask **Markdown or HTML** output; (3) treat **all** user input as hypothesis and emit a *"risks I see in what you gave me"* block; (4) print **validation debt** and write **`GO (to validation)`**, never bare `GO`; (5) accept a **custom output path**; (6) Deep mode runs an **evidence floor + self-critic loop** and uses a **direct-web + Evidence Pack fallback**. The hooks below wire each into this skill; the contract is the source of truth for the wording.
+> **Producer contract (binding) — `../PRODUCER-CONTRACT.md`.** Six cross-cutting behaviors shared by all producer skills, from user feedback: (1) print a **helicopter-view** before the first question; (2) ask **Markdown or HTML** output; (3) treat **all** user input as hypothesis and emit a *"risks I see in what you gave me"* block; (4) print **validation debt** and write **`GO (to validation)`**, never bare `GO`; (5) accept a **custom output path**; (6) Deep mode runs an **evidence floor + self-critic loop** and uses an **internet-access ladder + Evidence Pack fallback**. The hooks below wire each into this skill; the contract is the source of truth for the wording.
 
 > **New here, or not sure this is the right skill?** Start right here — or run `$nmt-chat`, describe your situation, and it points you to the right one. Quick map: **new idea →** `$nmt-market-research` · **live product or a metric moved →** `$nmt-diagnose` · **have customer interviews →** `$nmt-analyze-interviews` · **ready to build →** `$nmt-product-requirements` · **positioning / launch copy →** `$nmt-craft-value-proposition` → `$nmt-craft-go-to-market`.
 
@@ -73,7 +73,7 @@ Quick mode (one Codex agent): read the eager core, then read each staged file th
 - A "real segmentation criterion" is a **cause** (a behaviour or characteristic), never a paraphrased value or a consequence.
 - Competitors are defined by **Jobs, not categories** (direct on the Core Job; indirect on the Big Job, including "do nothing" and non-obvious substitutes).
 - Features follow from success criteria and a chosen value mechanic — not the reverse.
-- Every segment is scored on the **selection screen** (below); the focus pick is justified on it.
+- Every segment S1…Sn has the complete **selection screen** (below) and a focus / hold / reject conclusion; the focus pick is justified on it. Missing evidence is shown as `unknown`, `hypothesis`, or `not measured`, never invented precision.
 
 ---
 
@@ -100,13 +100,13 @@ The skill writes **exactly one** file. Default location (used unless the user ga
 Skills-Results/{product-slug}/market-research/{YYYY-MM-DD_HH-MM}_{product-slug}-market-research-result.{md|html}
 ```
 
-- **Extension follows the chosen output format** (`PRODUCER-CONTRACT.md §2`): `.md` (default) or a single self-contained `.html` (inline CSS, working in-page anchors for the How-to-read jumps + every `▸` drill-down link, **`<details>` collapsing Layer 2 and Layer 3** — both opt-in below the one-page answer — plus methodology traces, source links opening in a new tab). HTML carries the identical content — same attribution, disclaimers, three layers, tables, links — just in a more readable shell where the short answer leads and the deeper layers are collapsed by default. Never write both; one file per run.
+- **Extension follows the chosen output format** (`PRODUCER-CONTRACT.md §2`): `.md` (default) or a single self-contained `.html` (inline CSS, working in-page anchors for the How-to-read jumps + every `▸` drill-down link, **`<details id="layer-2" open>` for Layer 2 and `<details id="layer-3">` for Layer 3** — Layer 2 open by default, Layer 3 and methodology traces collapsed — plus source links opening in a new tab). HTML carries the identical content — same attribution, disclaimers, three layers, tables, links — just in a more readable shell where the short answer leads and the deeper layers are collapsed by default. Never write both; one file per run.
 - If the user gave a custom path, write the one file there with the same filename pattern.
 - `{YYYY-MM-DD_HH-MM}` (24h local time) makes each run's file unique; reruns never overwrite.
 - Everything internal — what the user provided, discarded hypotheses, antisegment checks, Big-Job validation, the full sizing tables, milestone notes, and **all methodology citations** (which never appear in the user-facing report — see "Readability") — **stays in-context**, never in a separate file.
 - Deep mode adds no intermediate files: subagents return their results in-message and the orchestrator writes the one file (see the Deep pipeline section).
 
-**Attribution (Rule 23).** The report opens with the attribution top-line (the very first content, above the disclaimers) and closes with the attribution block — `utm_source=nmt-market-research&utm_medium=skill-artifact`.
+**Attribution (Rule 23).** The report opens with the attribution top-line (the very first content, above the disclaimers) and closes with the attribution block. Both use the document language and preserve the required NMT links, license attribution, and `utm_source=nmt-market-research&utm_medium=skill-artifact`. State the meaning unambiguously: **“Methodology: Ivan Zamesin / Next Move Theory. Report generated using the nmt-market-research skill.”** Never attribute the generated report text to Ivan Zamesin unless he actually wrote it.
 
 ---
 
@@ -234,7 +234,7 @@ The target segment is the one whose answers compose most in our favour **and** b
 
 ## Mandatory disclaimers (top of the file, once — never repeated below)
 
-> ⚠️ **Numerical disclaimer.** All numerical estimates are LLM-generated hypotheses. Each metric names its assumptions and carries a runnable verification path (see appendix); in Deep mode sizing is computed via 3 methods on real sources and averaged. Validate before any investment decision.
+> ⚠️ **Numerical disclaimer.** All numerical estimates are LLM-generated hypotheses. Each metric names its assumptions and carries a runnable verification path (see appendix); in Deep mode sizing uses at least 3 genuinely independent external evidence inputs overall and reconciles only scope-normalized models. Validate before any investment decision.
 >
 > ⚠️ **Hallucination disclaimer.** Everything in this document is generated by an LLM and may contain hallucinations in unknown places. For decisions with expensive consequences, run a full quantitative and qualitative research pass; do not act on this document alone.
 
@@ -385,7 +385,7 @@ The detailed report below is the audit trail (Sections 1–6 + appendix). Add an
 
 | Metric | Estimate | How computed (1 line) |
 |--------|----------|------------------------|
-| TAM (global) | ~${X} | {Quick: one bottom-up calculation + its key assumption · Deep: averaged across 3 methods} |
+| TAM (global) | ~${X} | {Quick: one bottom-up calculation + its key assumption · Deep: triangulated from genuinely independent approaches where evidence permits} |
 | SAM ({Country}) | ~${Y} | {1 line} |
 | SOM (1–2 yr) | ~${Z} | {1 line} |
 
@@ -396,11 +396,15 @@ The detailed report below is the audit trail (Sections 1–6 + appendix). Add an
 > Sizing tables + verification are in the Appendix; the market-level Big Job is validated internally (in-context), not shown here.
 ```
 
-**Sizing honesty rule.** In **Quick mode** (no internet) compute each figure **once**, bottom-up, with the calculation logic agreed in the intake (STAGE 1 Step 5), every assumption named, and the figure marked as an *estimate without data — verify via the appendix path*. Do NOT fake rigor by "averaging 3 methods" that all come from the same reasoning. The **3-method averaging (top-down / bottom-up / analog)** runs only in **Deep mode**, where each method stands on real, linked sources.
+**Sizing honesty rule.** In **Quick mode** (no internet) compute each figure **once**, bottom-up, with the calculation logic agreed in the intake (STAGE 1 Step 5), every assumption named, and the figure marked as an *estimate without data — verify via the appendix path*. Do not simulate Deep sizing.
+
+In **Deep mode**, the sizing leg requires **at least 3 genuinely independent external evidence inputs overall**; multiple transformations of one dataset count as one input. Triangulate TAM through genuinely different approaches when available (top-down, bottom-up, analog/expenditure/seat, or another independent approach); three TAM methods are preferred when real data supports them, but never invent a third method to meet a count. Derive SAM from externally supported eligibility filters, observed proxies, causal segment constraints, or explicit scenarios. Label a proxy as a proxy, not a direct eligibility measure, and do not require three SAM methods. Model SOM as an achievable scenario using price, acquisition and channel capacity / number of wins, conversion, sales cycle, churn, and retention; separate external evidence from scenario assumptions. SOM is not another market-size estimate and does not require three sizing methods.
+
+Do not mechanically average or take a median across models that measure materially different scopes. Reconcile or use a median only after explicit scope normalization; otherwise report a range/triangulation and explain why the scopes remain incomparable.
 
 ## Section 2 — Map of Segments (depth follows the verdict)
 
-Start with the comparison table, then expand each segment. **Depth follows the verdict:** ✅ target segments get the full block below; ⚠️ hold segments get a half block (recommendation line, persona, Core Jobs, selection screen — skip the full size tables and competitor tables); ❌ not-ours segments get **one paragraph only** — who they are, the one binding reason they're not ours, coverage %. Don't spend three pages on a segment the reader is told to ignore.
+Start with the comparison table, then expand each segment. **Every S1…Sn segment must include the complete selection screen**: added value, target margin, ability to create/capture demand, sufficient size, hard blocker/existential gate, and a focus / hold / reject conclusion. **Depth follows the verdict only for explanatory prose:** focus segments are detailed, hold segments shorter, and reject segments very compact. Never remove the selection screen. If evidence is missing, write `unknown`, `hypothesis`, or `not measured` instead of generating precise numbers.
 
 ```markdown
 <a id="l3-segments"></a>
@@ -415,7 +419,7 @@ Start with the comparison table, then expand each segment. **Depth follows the v
 Segments are grouped by similar Core Jobs + similar success criteria (not by vertical or demographics); the same vertical can split across segments when the Core Jobs and criteria differ. Ordered ✅ → ⚠️ → ❌.
 ```
 
-Then, for each segment (✅ first, ⚠️ second, ❌ last), at the depth its verdict earns (full / half / one paragraph):
+Then, for each segment (✅ first, ⚠️ second, ❌ last), include the complete selection screen; vary only the surrounding explanatory depth (detailed / shorter / very compact):
 
 ```markdown
 ### {S#} — {Name tied to Jobs and real criteria} {✅/⚠️/❌}
@@ -471,6 +475,19 @@ Here's what they hire a product for, in the customer's own words:
 ```
 
 Close Section 2 with a short **cross-segment themes** block (4–7 patterns spanning segments) and a one-line coverage-verification path (interview 6–8 past payers; if 30%+ don't fit, add a segment).
+
+For **Deep mode**, close Section 2 with this compact Layer-3 audit trail (do not print the full raw quote harvest):
+
+```markdown
+### Competitor / review evidence audit
+**competitors/reviews evidence floor: {PASS/FAIL}**
+
+| Competitor | Verified official product / pricing / integration source(s) | Direct review source | Reviews examined | Review period / access date | 2–5 concise review signals | Sample limitations |
+|---|---|---|---:|---|---|---|
+| {name} | {[official source](url), or `unverified`} | {[direct review URL](url)} | {N} | {period/date} | {signals} | {limits} |
+```
+
+Capability claims require a verified official source. Reviews support customer-experience signals, not an official feature set; if an official page is unavailable, mark the capability `unverified`. A feature's absence from a viewed page is not evidence that the feature is absent. Do not present reviews as procurement, ROI, or willingness-to-pay evidence unless the reviewed material actually measures that claim.
 
 ## Section 3 — Differentiation hypothesis (target segment)
 
@@ -572,7 +589,7 @@ This is the heart of Layer 3: for **each** risky assumption in the table above (
 
 ## Section 6 — Verification checklist
 
-Emit `<a id="disclaimers"></a>` above this heading (Layer 1 links to it). **Do not repeat the full two-part disclaimer here** — it appears once at the top of the file; a single italic pointer line is enough (*"Disclaimers at the top of this file apply."*). Then a checklist covering: run the sizing verifications (appendix — Quick: the single calculation's assumptions; Deep: the 3-method tables); find 6–8 past payers in the target segment and run AJTBD interviews (ask about *tasks*, not "Jobs"); confirm segment coverage and the antisegment; validate the tagged user claims the analysis leaned on; run the action plan from Section 5; a source-link audit (every named source is a live clickable link; re-check any flagged "URL TBD").
+Emit `<a id="disclaimers"></a>` above this heading (Layer 1 links to it). **Do not repeat the full two-part disclaimer here** — it appears once at the top of the file; a single italic pointer line is enough (*"Disclaimers at the top of this file apply."*). Then a checklist covering: run the sizing verifications (appendix — Quick: the single calculation's assumptions; Deep: independent-input tables, scope normalization, and triangulation); find 6–8 past payers in the target segment and run AJTBD interviews (ask about *tasks*, not "Jobs"); confirm segment coverage and the antisegment; validate the tagged user claims the analysis leaned on; run the action plan from Section 5; a source-link audit (every named source is a live clickable link; re-check any flagged "URL TBD").
 
 <a id="l3-sizing"></a>
 ## Appendix — market sizing, and how to re-check it yourself
@@ -595,7 +612,7 @@ For **each** of TAM / SAM / SOM, and for **each segment's size + Job budget**, o
   | {win-rate in 1–2 yrs} | {%} | {benchmark / assumption} | {…} |
 ```
 
-In **Quick mode** each figure is one bottom-up calculation with assumptions named (no fake 3-method averaging). In **Deep mode** show a compact 3-method table (top-down / bottom-up / analog), each method on a real linked source, plus the reconciled number.
+In **Quick mode** each figure is one bottom-up calculation with assumptions named. In **Deep mode**, show the genuinely independent external inputs and each supported TAM approach in a compact table. Show SAM filters/proxies/scenarios and SOM scenario assumptions separately. Reconcile only after explicit scope normalization; otherwise show the range and explain the mismatch.
 
 ### B. Re-check it yourself — step by step
 
@@ -622,7 +639,7 @@ Methodology only — format is guaranteed by the templates above, so it is not r
 
 1. **Segments = similar Core Jobs + similar success criteria** — not demographics, not Big Jobs, not industry.
 2. **Real criteria are causes** (a behaviour / characteristic explaining how we create value, earn margin, or acquire), not paraphrased value or consequences.
-3. **Selection screen applied** to every segment, and the focus pick justified on it.
+3. **Complete selection screen applied** to every S1…Sn segment: added value, target margin, demand, sufficient size, hard blocker/existential gate, and focus/hold/reject conclusion. Missing evidence is marked `unknown`, `hypothesis`, or `not measured`; explanatory depth may vary, but the screen may not.
 4. **Switchability assessed** — the segment has triggered, unsatisfied customers willing to switch (the Problem is the trigger), not only habitual locked-in users.
 5. **Jobs use the canon grammar** — `When … I want to {expected outcome} with success criteria … in order to …`; one expected outcome per Job; levels named and product-relative.
 6. **Core vs Big distinguished** — Core = highest Jobs the product performs fully; Big = motivation above, not the segmentation root.
@@ -633,6 +650,8 @@ Methodology only — format is guaranteed by the templates above, so it is not r
 11. **Pivot markets evaluated on the same selection screen** against the extracted assets; existential-risk gate applied; each is a concrete Segment + Big-Job pair.
 12. **User claims stayed hypotheses** — every load-bearing user claim is tagged (data / observation / hunch); no verdict, target-segment pick, or strategy rests primarily on a single unverified user hunch without saying so; "I don't have this info" answers surface as explicit assumptions, not invented specifics.
 13. **Strategic options are ranked hypotheses** — 3–5 options, each with a mechanism, a main risk, and a first cheapest validation step; none reads as consultant advice to follow blind.
+14. **Deep sizing integrity** — ≥3 genuinely independent external inputs overall; no repeated-dataset transformations counted as independent; no invented TAM method; SAM proxies labeled; SOM modeled as achievable scenario; reconciliation only after scope normalization.
+15. **Competitor/review evidence audit** — Layer 3 states `competitors/reviews evidence floor: PASS/FAIL` and makes every capability/review claim traceable under the audit rules below.
 - [ ] Plain-language-led — every user-facing point leads in the reader's own words; methodology terms only in parentheses (never jargon-first); the methodology appendix / debug may stay in full terms.
 - [ ] **Three layers present and correctly leveled** — Layer 1 (minimal jargon, plain words lead, terms only in parentheses), Layer 2 (plain reasoning, terms glossed), Layer 3 (the full work). No conclusion is repeated at the same depth across layers.
 - [ ] **Drill-down links resolve and are unique** — every Layer-1 claim links to a real Layer-2 anchor; every Layer-2 claim links to a real Layer-3 anchor; every `#l...`/`#disclaimers` target exists **exactly once** and no two links share a target.
@@ -673,7 +692,7 @@ Triggered when the user picks Deep. A team of subagents with web access fills th
 - Web caps (hold the longest legs): reviews-mining ≤ 12 `WebFetch` / ~10 min; synthesis ≤ 6; strategy ≤ 4. Pivot agents are reasoning-bound (≤ 2 fetches if any).
 - **Evidence floor, not just a ceiling** (`PRODUCER-CONTRACT.md §6`). Each web leg also has a *minimum*: it may not return "done" until it has hit a real floor of distinct sources for its task (sizing → ≥3 independent inputs; competitors/reviews → ≥4 competitors with real review sources). If it cannot reach that minimum after the retry loop, it must stop and request an Evidence Pack per `PRODUCER-CONTRACT.md §6`. "Did two queries and stopped" is a failure, not a completion.
 - **Self-critic loop per leg.** After a leg returns, a critic pass checks: enough distinct sources? load-bearing claims verified against a real source? any methodology error (segment by demographics, Big-Job-as-segment, features-before-criteria, undersized SAM)? gaps? If it fails, re-run the leg with the gap named — up to 2 extra rounds. Don't ship a leg that failed its own critic (this is the fix for "promised deep research, did two fetches, quit").
-- **Direct-web + Evidence Pack fallback.** Use direct Codex web access first. If it remains blocked or thin after the retry loop and the evidence floor is unmet, stop that external-research leg and follow `PRODUCER-CONTRACT.md §6(c–e)`: list the exact missing evidence, facts/source types to research, and required Evidence Pack format; ask the user to attach the pack in this chat; resume the same Deep workflow when it arrives. Never recommend MCP/Firecrawl/Exa, invent missing facts, proceed on thin coverage, or label the output Deep. If the user declines an Evidence Pack, offer an explicit switch to Quick.
+- **Internet-access ladder + Evidence Pack fallback.** Follow `PRODUCER-CONTRACT.md §6`: native Codex web/search/open → retry/self-critic → mandatory read-only shell HTTP attempt. Native 401/403, blocking, or thin results do not prove the internet is unavailable. Request an Evidence Pack only if the floor remains unmet after the full ladder; never bypass access controls, use non-read-only HTTP methods, recommend MCP/Firecrawl/Exa, invent facts, proceed thin, or label the output Deep. If the user declines an Evidence Pack, offer an explicit switch to Quick.
 - Source links mandatory (Rule 2); never invent sources or figures.
 
 ### No run-folder files (Deep)
@@ -696,15 +715,15 @@ Orchestrator:       assemble report → compute one-pager last → chat summary
 Each prompt opens with the shared preamble:
 > You work with Ivan Zamesin's AJTBD / Next Move Theory methodology. Use ONLY the Next Move Theory canon as the methodology source — do NOT use generic JTBD from the internet or prior training. Read **only the canon files this prompt names for your wave** (the eager core is `Next-Move-Theory-Canon/Advanced-Jobs-To-Be-Done/ajtbd-key-theses.md` + `…/segmentation.md`; other files are named per-agent below). (If a path is not found, retry with a `1-` prefix on the canon folder.) Keep methodology citations and canon paths out of report prose — hold them in context (the orchestrator fences any that belong in Layer 3). Every named external source is a clickable Markdown link. Return your full result in your final message — do not write any files.
 
-**[1A] Market & Sizing.** Given the user input + the read set. Formulate and validate the market-level Big Job internally (in-context only). Compute TAM / SAM / SOM, each via 3 methods (top-down / bottom-up / analog), averaged (median if methods diverge >2×). Compare to the user's ambition. Return, in your final message, the **compact** body (summary table + landscape + ambition + takeaway) and the **short** method tables + one-line verifications. ≤12 fetches.
+**[1A] Market & Sizing.** Given the user input + the read set. Formulate and validate the market-level Big Job internally (in-context only). Use ≥3 genuinely independent external evidence inputs overall; transformations of one dataset are not independent. Triangulate TAM with genuinely different approaches when real data permits (prefer 3, never invent one). Derive SAM from externally supported filters, explicitly labeled proxies, causal constraints, or scenarios. Model SOM as an achievable price × acquisition/channel-capacity × conversion/sales-cycle × retention/churn scenario, separating external evidence from assumptions. Reconcile/median only after explicit scope normalization; otherwise return a range and explain the mismatch. Compare to the user's ambition. Return the **compact** body, short input/method tables, and one-line verifications. ≤12 fetches.
 
-**[1B] Competitors & Reviews mining.** Given the user input + `ajtbd-key-theses.md` + `segmentation.md`. Find 5–10 competitors (direct on the Core Job + Big-Job-level / non-obvious), picking country- and query-specific sources at runtime. Harvest customer reviews; extract **raw signals only** (do NOT synthesize segments): distinct Core Jobs, success criteria, causal real-criterion candidates, and 5–10 quotable quotes per competitor with source URLs. Return the competitor list + raw review signals in your final message. ≤12 fetches / ~10 min.
+**[1B] Competitors & Reviews mining.** Given the user input + `ajtbd-key-theses.md` + `segmentation.md`. Find 5–10 competitors (direct on the Core Job + Big-Job-level / non-obvious), picking country- and query-specific sources at runtime. Harvest customer reviews; extract **raw signals only** (do NOT synthesize segments): distinct Core Jobs, success criteria, causal real-criterion candidates, and quotable signals with source URLs. For every researched competitor return an audit row: verified official product/pricing/integration source(s), direct review URL, reviews examined count, review period or access date, 2–5 concise review signals, and sample limitations; state `competitors/reviews evidence floor: PASS/FAIL`. Capability claims require verified official sources; reviews show experience, not the official feature set. If the official page is unavailable, mark capability `unverified`; absence on one page is not evidence of absence. Do not treat reviews as procurement, ROI, or willingness-to-pay evidence unless they measured it. Raw quotes may remain in context rather than the report. ≤12 fetches / ~10 min.
 
 **[P1] Asset Extraction.** Given the user input (idea + assets) + `nmt-key-theses.md`. From first principles, extract and name the idea's **essence**, **technology / capability**, **team expertise & unfair advantages**, **resources in hand** (money, partners, traction, distribution, data, brand), and **hard constraints**. Tag each asset **transferable** vs **idea-specific**. Return the asset inventory in your final message. No web.
 
 **[P2] Market & Segment-Jobs Generation.** Given the [P1] asset inventory + the read set. Generate **5–8 candidate Big-Job markets** where the assets create value, across diverse angles (where the tech applies · where the team's expertise/access/partners apply · adjacent Big Jobs / climb-a-level moves). For **each** candidate, also generate the **Segment-and-Jobs hypothesis** — a named target segment (causal criteria) + its Core Jobs + success criteria — and which assets transfer. (Segment+Job is one analytical entity; a bare market name is not evaluable.) Depth = hypothesis, not deep research. Return the candidate markets in your final message. ≤2 fetches.
 
-**[2] Segments Synthesis & Self-Critic.** Given the user input + the [1A] sizing + the [1B] competitor/review returns + the read set. Group customers from the mined signals into segments by **similar Core Jobs + similar success criteria + causal criteria**. Build each segment block per the Section-2 template (persona → Core Jobs → Big Jobs → size+budget+switchable share → **selection screen** → competitors inline). Order ✅ → ⚠️ → ❌; **depth follows the verdict** (✅ full block · ⚠️ half block · ❌ one paragraph). Include the cross-segment themes block. Run the **self-critic criteria** over the draft and fix in place. Keep internal-only items (Big-Job validation, antisegment causality, discarded segments) in your reasoning, not the output. Return the segment blocks + short method tables in your final message.
+**[2] Segments Synthesis & Self-Critic.** Given the user input + the [1A] sizing + the [1B] competitor/review returns + the read set. Group customers from the mined signals into segments by **similar Core Jobs + similar success criteria + causal criteria**. Build each segment block per the Section-2 template (persona → Core Jobs → Big Jobs → size+budget+switchable share → **selection screen** → competitors inline). Order ✅ → ⚠️ → ❌. Give **every S1…Sn segment the complete selection screen and focus/hold/reject conclusion**; depth-by-verdict changes explanatory prose only (focus detailed, hold shorter, reject compact). Use `unknown`, `hypothesis`, or `not measured` where evidence is absent. Include the cross-segment themes block. Run the **self-critic criteria** over the draft and fix in place. Keep internal-only items (Big-Job validation, antisegment causality, discarded segments) in your reasoning, not the output. Return the segment blocks + short method tables in your final message.
 
 **[3] Strategy (Differentiation + action-RAT + strategic options).** Given the user input (incl. the user-claims ledger) + the [1A] sizing + the [2] segments + the [1B] review signals + the read set + `value-creation-mechanics.md`. Pick the target segment (selection-screen composition + asset fit). Produce Section 3 (positioning headline → why this segment → criteria×competitors matrix → underserved wedge → one-line mechanic direction, NO feature list → Big-Job-level threat) and Section 5 (action-first RAT on the cause-and-effect chain: each risk positive + falsifiable + paired with its validation action; then the Step 1/2/3 action plan, ordered by RAT priority; drop any "≤1 week" constraint; **then the detailed per-assumption validation plan** — for the top 3–4 assumptions, a canon-grounded block each with Method / Steps / Kill criterion / Cost-time, so the reader can run the test, not just read the risk). Also draft the **Strategic options table (top 3–5, ranked)** for Section 4, drawing on the full move space (narrow / pivot / sequence markets / model change / Previous-Next Job / climb a level). Verify any load-bearing user claim from the ledger (≤2 of your fetches); a strategy resting on an unverified user claim must say so. Return Section 3 + the strategic options + Section 5 in your final message. ≤6 fetches.
 
@@ -717,8 +736,9 @@ Each prompt opens with the shared preamble:
 4. Spawn Wave 3 (Strategy + P3) in parallel; wait.
 5. Assemble the single file as the three layers: top disclaimers (once) → **How to read this (3 levels, with jump links)** → **Layer 1 (The Answer)** → **Layer 2 (The Reasoning)** → **Layer 3** = Section 1 (sizing) → Section 2 (segments) → Section 3 (differentiation) → Section 4 (within-segment switches + alternative markets + strategic options) → Section 5 (action-RAT) → Section 6 → Appendix. Add the section anchors; **compute Layer 2 then Layer 1 LAST** from the assembled Layer-3 work, wiring drill-down links to the anchors; fence any methodology citations into `▸ methodology trace` lines.
 6. **Step ledger:** check every wave and every section off by name before assembly; a skipped stage is declared to the user, never silent.
-7. Source-link audit; flag any bare or "URL TBD" sources in the checklist.
-8. Chat output (below).
+7. Add the compact competitor/review evidence audit trail to Layer 3 and run the source-link/load-bearing-claim audit; flag any bare or "URL TBD" sources in the checklist.
+8. Run the binding `PRODUCER-CONTRACT.md §6(e)` PRE-WRITE / PRE-COMMIT Deep completion gate. Do not write or commit a final Deep artifact unless every mandatory gate is evidence-backed PASS.
+9. Chat output (below).
 
 ---
 
