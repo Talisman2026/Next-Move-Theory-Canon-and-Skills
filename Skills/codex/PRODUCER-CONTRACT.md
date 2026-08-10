@@ -26,7 +26,7 @@ This section is a Codex-only override in the `Skills/codex` / installed `.agents
 3. **Critical treatment of all user input** — everything the user provides is a hypothesis; surface the risks inside it in a dedicated block.
 4. **Visible validation debt** — print how many unvalidated assumptions the artifact stands on; `GO` → `GO (to validation)`.
 5. **Configurable output path** — default `Skills-Results/…`, but accept the host repo's convention.
-6. **Deep-mode QA loop + Evidence Pack fallback** — Deep mode starts with direct Codex web access, must meet an evidence floor, and pauses for an attached external Evidence Pack when that floor cannot be met.
+6. **Deep-mode QA loop + Evidence Pack fallback** — Deep mode follows the native-web → retry/self-critic → read-only shell-HTTP ladder, must meet an evidence floor, and pauses for an attached external Evidence Pack only when that ladder cannot meet the floor.
 
 ---
 
@@ -118,13 +118,15 @@ If the user gives a path, write the single result file there, keeping the same `
 
 ## 6. Deep-mode QA loop + Evidence Pack fallback
 
-Deep research in this Codex installation uses **direct Codex web access only**. MCP is not part of the execution path. The normal Deep workflow is unchanged whenever direct web research reaches the skill's evidence floor.
+Deep research uses the available native Codex web/search/open capabilities first, then safe read-only direct HTTP from the shell when native access is insufficient. MCP and external research connectors are not part of the execution path.
 
-**(a) Direct web first; evidence floor is a hard gate.** Start every Deep-mode research leg with Codex's direct web tools and observe the leg's existing web caps. Treat the **lower bound as a floor**: a leg may return "done" only after it reaches the required minimum of distinct, relevant sources. "Did two queries and stopped" is a failure state, not completion. If the floor is reached, continue the ordinary Deep workflow.
+**(a) Internet-access ladder; evidence floor is a hard gate.** Start every Deep-mode research leg with available native/direct Codex web/search/open capabilities and observe the leg's existing caps. A blocked, unauthorized, thin, or below-floor native result is **not** evidence that internet access is unavailable. Treat the **lower bound as a floor**: a leg may return "done" only after it reaches the required minimum of distinct, relevant sources. "Did two queries and stopped" is a failure state, not completion.
 
-**(b) Self-critic loop on each leg.** After a research leg returns, run a short critic pass asking: *enough distinct sources? load-bearing claims actually verified against a source? any methodology error (segment by demographics, Big-Job-as-segment, features-before-criteria, undersized market)? gaps left?* If it fails, re-run the direct-web leg with the gap named — up to 2 extra rounds. Don't ship a leg that failed its own critic.
+**(b) Self-critic and mandatory read-only shell fallback.** After a research leg returns, run a short critic pass asking: *enough distinct sources? load-bearing claims actually verified against a source? any methodology error (segment by demographics, Big-Job-as-segment, features-before-criteria, undersized market)? gaps left?* If it fails, retry with the gap named — up to 2 extra rounds. If native access is blocked, unauthorized, thin, or still below the floor, then, **before requesting an Evidence Pack**, try read-only direct HTTP from the shell: `curl` GET/HEAD, Python `urllib.request`, or an equivalent safe read-only GET/HEAD mechanism available in the environment. Public GET search/index pages may be used for discovery when the environment permits. Do not use POST, PUT, PATCH, or DELETE anywhere in this research fallback.
 
-**(c) Evidence Pack fallback when the floor cannot be reached.** If direct web access is fully or partly blocked and the required evidence floor remains unmet after the retry loop:
+Do not bypass authentication, paywalls, explicit access restrictions, CAPTCHA, or site blocks. If a source returns 401/403, do not circumvent it; find another public source. Never recommend MCP, Firecrawl, or Exa.
+
+**(c) Evidence Pack fallback only after the ladder fails.** Request an Evidence Pack only when the required floor remains unmet after **native web attempt → retry/self-critic → read-only shell HTTP attempt**:
 
 1. **Stop the external-research portion.** Do not recommend or attempt MCP, Firecrawl, Exa, or another connector. Do not fill missing market facts from model memory, proceed on thin coverage, or publish the artifact as a complete Deep result.
 2. **Return a precise evidence-gap request in chat:**
@@ -154,7 +156,17 @@ Attach source files, screenshots, or exports where a direct URL is inaccessible.
 
 **(d) Mode-integrity rule.** Never label or present an output as full/complete **Deep** unless every mandatory evidence floor has been reached with sources Codex verified or evidence in the attached Evidence Pack. A paused Deep run is an evidence request, not a deliverable.
 
-**(e) Quick after an explicit switch.** Quick uses one honest sizing calculation with every assumption named. It never simulates Deep's three-method sizing with model-generated inputs, and never states unverified competitor, review, price, market, or regulatory claims as facts. Mark them as hypotheses/unverified and provide a verification path.
+**(e) PRE-WRITE / PRE-COMMIT Deep completion gate.** Before first saving a final Deep artifact, updating an existing artifact as complete Deep, or committing a final Deep artifact, the orchestrator must explicitly check and record against the evidence actually collected and stages actually run:
+
+- every mandatory evidence floor — **PASS / FAIL**;
+- every research-leg self-critic — **PASS / FAIL**;
+- the load-bearing-source audit — **PASS / FAIL**;
+- skill-specific methodological invariants — **PASS / FAIL**;
+- required output/readability-contract gates — **PASS / FAIL**.
+
+A textual PASS without the supporting evidence or completed stage does not count. If **any** mandatory gate is FAIL: do not label the result full/complete Deep; do not write a new final Deep artifact; do not overwrite an existing Deep artifact as corrected/complete; do not commit the final Deep artifact. Stop that part of the workflow, tell the user the exact failed gate and reason, and continue research/retry or request an Evidence Pack under §6(c). A paused Deep remains an evidence/research request, not a deliverable.
+
+**(f) Quick after an explicit switch.** Quick uses one honest sizing calculation with every assumption named. It never simulates Deep sizing with model-generated inputs, and never states unverified competitor, review, price, market, or regulatory claims as facts. Mark them as hypotheses/unverified and provide a verification path.
 
 ---
 
@@ -168,4 +180,4 @@ A producer skill satisfies this contract when:
 - [ ] Its template carries the **"What you told me — and the risks I see in it"** block, and its intake/self-critic enforces the input-as-hypothesis gate (§3).
 - [ ] Its Layer-1 template carries the **validation-debt line**, and every `GO` is **`GO (to validation)`** (§4).
 - [ ] On hand-off, it asks what validation debt has been retired since the prior artifact (§4c).
-- [ ] Deep mode uses **direct web first**, enforces the **evidence floor + self-critic loop**, and pauses for an attached **Evidence Pack** when the floor cannot be reached (§6).
+- [ ] Deep mode follows the **native web → retry/self-critic → read-only shell HTTP** ladder, enforces every evidence floor, runs the evidence-backed PRE-WRITE / PRE-COMMIT gate, and pauses for an attached **Evidence Pack** only when the full ladder cannot reach the floor (§6).
