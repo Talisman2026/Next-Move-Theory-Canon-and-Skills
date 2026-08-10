@@ -26,7 +26,7 @@ This section is a Codex-only override in the `Skills/codex` / installed `.agents
 3. **Critical treatment of all user input** — everything the user provides is a hypothesis; surface the risks inside it in a dedicated block.
 4. **Visible validation debt** — print how many unvalidated assumptions the artifact stands on; `GO` → `GO (to validation)`.
 5. **Configurable output path** — default `Skills-Results/…`, but accept the host repo's convention.
-6. **Deep-mode QA loop + web-MCP fallback** — Deep mode must meet an evidence floor and self-check; recommend a web MCP when the built-in fetch is blocked.
+6. **Deep-mode QA loop + Evidence Pack fallback** — Deep mode starts with direct Codex web access, must meet an evidence floor, and pauses for an attached external Evidence Pack when that floor cannot be met.
 
 ---
 
@@ -40,7 +40,7 @@ Keep it to ~8–12 lines:
 - **The steps** — 3–6 numbered phases, one line each.
 - **Where AI works vs. where you decide / validate** — name explicitly that AI does the analysis; the user picks direction and runs the field validation (interviews, sales, tests). AI cannot validate for them.
 - **The two modes** — *Quick (default): no internet, ~3–5 min, reasoning only — good for a first cut, hypotheses, "did I miss something."* · *Deep (opt-in): subagents + web research, longer — real competitor/market/review data.* (From user testing: people didn't know Quick vs Deep existed, or what Quick is for.)
-- **Rough cost** — a ballpark of time and token usage so the user can choose a model (Quick: light; Deep: heavy — best on a top model with a web MCP).
+- **Rough cost** — a ballpark of time and token usage so the user can choose a model (Quick: light; Deep: heavy — best on a top model with direct web access).
 - **One honest caveat** — *"This speeds up the thinking, not the proving. The numbers and segments are hypotheses until you check them in the field."*
 
 End with: *"Ready? First, a few questions."* → proceed to intake. Don't make the user read a wall — this is a map, not a manual.
@@ -116,19 +116,45 @@ Add to intake (one line, default is the current behavior — no friction for the
 
 If the user gives a path, write the single result file there, keeping the same `{YYYY-MM-DD_HH-MM}_{product-slug}-{skill}-result.{md|html}` filename. If they skip, use the default. Never write more than one file regardless of location (Rule 4).
 
-## 6. Deep-mode QA loop + web-MCP fallback
+## 6. Deep-mode QA loop + Evidence Pack fallback
 
-From user testing: *"`$nmt-craft-value-proposition` promised deep research, made two queries, and quit."* And: *"G2 is blocked from Claude Code — use a firecrawl/exa MCP."* Also: Deep results sometimes had methodology errors and undersized SAM.
+Deep research in this Codex installation uses **direct Codex web access only**. MCP is not part of the execution path. The normal Deep workflow is unchanged whenever direct web research reaches the skill's evidence floor.
 
-**(a) Evidence floor (not just a ceiling).** Each Deep-mode research leg has web *caps* (max fetches). Treat the **lower bound as a floor**: a leg may not return "done" until it has either hit a real minimum of distinct sources for its task or explicitly reported *why* fewer were possible (blocked, none exist). "Did two queries and stopped" is a failure state, not a completion.
+**(a) Direct web first; evidence floor is a hard gate.** Start every Deep-mode research leg with Codex's direct web tools and observe the leg's existing web caps. Treat the **lower bound as a floor**: a leg may return "done" only after it reaches the required minimum of distinct, relevant sources. "Did two queries and stopped" is a failure state, not completion. If the floor is reached, continue the ordinary Deep workflow.
 
-**(b) Self-critic loop on each leg.** After a research leg returns, run a short critic pass (Quick: inline self-critique; Deep: a critic check) asking: *enough distinct sources? load-bearing claims actually verified against a source? any methodology error (segment by demographics, Big-Job-as-segment, features-before-criteria, undersized market)? gaps left?* If it fails, re-run the leg with the gap named — up to 2 extra rounds. Don't ship a leg that failed its own critic.
+**(b) Self-critic loop on each leg.** After a research leg returns, run a short critic pass asking: *enough distinct sources? load-bearing claims actually verified against a source? any methodology error (segment by demographics, Big-Job-as-segment, features-before-criteria, undersized market)? gaps left?* If it fails, re-run the direct-web leg with the gap named — up to 2 extra rounds. Don't ship a leg that failed its own critic.
 
-**(c) Web-MCP fallback.** When the built-in fetch is blocked or thin on a needed source (G2, Capterra, local-market sites), tell the user once and use a web-research MCP if available:
+**(c) Evidence Pack fallback when the floor cannot be reached.** If direct web access is fully or partly blocked and the required evidence floor remains unmet after the retry loop:
 
-> Some sources (e.g., G2, Capterra) block the built-in fetch. For fuller Deep research, enable a web-research MCP — [Firecrawl](https://www.firecrawl.dev/) or [Exa](https://exa.ai/) (both ship MCP servers) — and I'll use it. Without it, I'll note where coverage was thin.
+1. **Stop the external-research portion.** Do not recommend or attempt MCP, Firecrawl, Exa, or another connector. Do not fill missing market facts from model memory, proceed on thin coverage, or publish the artifact as a complete Deep result.
+2. **Return a precise evidence-gap request in chat:**
+   - the evidence missing from each blocked leg and why it is required;
+   - the facts and source types/pages an external research tool must investigate;
+   - the required return format shown below.
+3. Tell the user they may attach or paste the resulting **Evidence Pack directly into this Codex chat**. Never require it to be saved in GitHub or committed to the repository.
+4. When the Evidence Pack arrives, **resume the same Deep workflow at the blocked leg**. Treat as externally verified only claims supported by the pack or by sources Codex successfully verified itself; label every other claim `hypothesis` or `unverified`.
+5. If the user does not want to obtain an Evidence Pack, offer an **explicit switch to Quick**. Do not switch modes silently.
 
-If such an MCP is connected (discoverable via tool search), prefer it for blocked sources; otherwise proceed and flag thin coverage in the verification checklist.
+Required Evidence Pack format:
+
+```markdown
+# Evidence Pack
+## {research leg / missing evidence category}
+- Claim or fact:
+- Value / finding:
+- Geography and date / period:
+- Source title and publisher:
+- Direct URL:
+- Publication or access date:
+- Relevant excerpt or table row:
+- Notes on method / limitations:
+```
+
+Attach source files, screenshots, or exports where a direct URL is inaccessible. A URL without the relevant finding is a lead, not evidence.
+
+**(d) Mode-integrity rule.** Never label or present an output as full/complete **Deep** unless every mandatory evidence floor has been reached with sources Codex verified or evidence in the attached Evidence Pack. A paused Deep run is an evidence request, not a deliverable.
+
+**(e) Quick after an explicit switch.** Quick uses one honest sizing calculation with every assumption named. It never simulates Deep's three-method sizing with model-generated inputs, and never states unverified competitor, review, price, market, or regulatory claims as facts. Mark them as hypotheses/unverified and provide a verification path.
 
 ---
 
@@ -142,4 +168,4 @@ A producer skill satisfies this contract when:
 - [ ] Its template carries the **"What you told me — and the risks I see in it"** block, and its intake/self-critic enforces the input-as-hypothesis gate (§3).
 - [ ] Its Layer-1 template carries the **validation-debt line**, and every `GO` is **`GO (to validation)`** (§4).
 - [ ] On hand-off, it asks what validation debt has been retired since the prior artifact (§4c).
-- [ ] Deep mode enforces the **evidence floor + self-critic loop** and offers the **web-MCP fallback** (§6).
+- [ ] Deep mode uses **direct web first**, enforces the **evidence floor + self-critic loop**, and pauses for an attached **Evidence Pack** when the floor cannot be reached (§6).

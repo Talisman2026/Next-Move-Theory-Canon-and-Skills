@@ -21,7 +21,7 @@ user-invocable: true
 
 > **One breath.** This skill turns the value you've already built into the copy that brings in customers — landing copy, ad/creative copy, and a launch + growth plan. It's the last step of the chain and builds on the steps before it; it never invents the segment, the value, or the build. Everything is said through the bigger outcome the customer is really after (their **Big Job**, where motivation lives), in concrete, measurable terms (**success criteria**, not adjectives), with features used as proof, not as the message. Copy can carry value, not manufacture it: if the value isn't proven yet, the skill says so up front — it can still write you demand-test copy, just don't scale on it.
 
-> **Producer contract (binding) — `../PRODUCER-CONTRACT.md`.** Six cross-cutting behaviors shared by all producer skills, from user feedback: (1) print a **helicopter-view** before the first question; (2) ask **Markdown or HTML** output; (3) treat **all** user input as hypothesis and emit a *"risks I see in what you gave me"* block; (4) print **validation debt** and frame the pack as *test this messaging*, never *this will work* (GTM has no GO verdict — it inherits the debt of the value it sells); (5) accept a **custom output path**; (6) Deep mode runs an **evidence floor + self-critic loop** and offers a **web-MCP fallback**. The hooks below wire each into this skill; the contract is the source of truth for the wording.
+> **Producer contract (binding) — `../PRODUCER-CONTRACT.md`.** Six cross-cutting behaviors shared by all producer skills, from user feedback: (1) print a **helicopter-view** before the first question; (2) ask **Markdown or HTML** output; (3) treat **all** user input as hypothesis and emit a *"risks I see in what you gave me"* block; (4) print **validation debt** and frame the pack as *test this messaging*, never *this will work* (GTM has no GO verdict — it inherits the debt of the value it sells); (5) accept a **custom output path**; (6) Deep mode runs an **evidence floor + self-critic loop** and uses a **direct-web + Evidence Pack fallback**. The hooks below wire each into this skill; the contract is the source of truth for the wording.
 
 ## Where this skill sits in the chain
 
@@ -160,7 +160,7 @@ Before any question, print this short orientation block in plain words, in the u
 > **What you'll get:** one pack — ready-to-publish landing-page copy, ad/creative copy, and a GTM/growth plan (channels, lead magnets, viral loops, cross-sell / upsell / retention messaging).
 > **The steps:** (1) a few questions + I read your upstream artifact → (2) I write the landing copy → (3) I write the ad/creative copy → (4) I build the channel & growth plan → (5) you get one pack in three reading depths.
 > **Where I work vs. where you decide:** I write the copy and the channel hypotheses. *You* pick what to ship and run the field validation — A/B tests, real spend, real conversions. I can't prove a channel or a message works; I can only tell you what to test first.
-> **Two modes:** *Quick* (default — no internet, ~10–15 min, reasoning only; good for a first draft) · *Deep* (opt-in — subagents mine real customer-review language + ground the competitor-firing in real Problems, longer; best on a top model with a web-research MCP).
+> **Two modes:** *Quick* (default — no internet, ~10–15 min, reasoning only; good for a first draft) · *Deep* (opt-in — subagents mine real customer-review language + ground the competitor-firing in real Problems, longer; uses direct Codex web access).
 > **Honest caveat:** this packages value into copy — it doesn't prove the value, the message, or the channel. Better copy on an unvalidated value claim only accelerates disappointment. Everything here is a hypothesis until you test it.
 
 ### Intake depth — ask this first (how many questions, separate from Quick/Deep mode)
@@ -437,7 +437,7 @@ Run the self-critic over the draft (Quick: self-critique; Deep: a critic agent),
 - [ ] **`[VERIFY]` survives into the copy** — every number/claim in landing & ad copy keeps its inline `[VERIFY — source]` tag until proven; opaque table headers carry an inline plain gloss.
 - [ ] **Disclaimers once; answer first** — the two-part disclaimer at the top only; the validation flag sits below the Layer-1 answer (≤2 lines), not above it; Layer 1 has the one-line pointer; Layer 3 does not repeat the block.
 - [ ] **Citations fenced — landing and ad copy must be citation-free.** No canon path or `Rule N` inline in any copy, in Layers 1–2, or in Layer-3 prose; every canon reference sits in a `▸ methodology trace` line at the end of a part. Read the landing blocks and ad lines straight through: they must read as clean, shippable copy.
-- [ ] **Producer contract satisfied (`../PRODUCER-CONTRACT.md`).** Helicopter-view printed before the first question (§1); intake asked output-format (§2) and output-path (§5); HTML run wrote one self-contained `.html` with working anchors + `<details>`; the **"What you told me — and the risks I see in it"** block is present and the input-as-hypothesis gate held (§3); the **validation-debt line** is in Layer 1 and the pack reads as "test this messaging/channel," never "this will work" (§4); on hand-off, the run asked what of the upstream artifact's debt is now validated and carried the rest forward (§4c); Deep mode met the **evidence floor + self-critic loop** and offered the **web-MCP fallback** (§6).
+- [ ] **Producer contract satisfied (`../PRODUCER-CONTRACT.md`).** Helicopter-view printed before the first question (§1); intake asked output-format (§2) and output-path (§5); HTML run wrote one self-contained `.html` with working anchors + `<details>`; the **"What you told me — and the risks I see in it"** block is present and the input-as-hypothesis gate held (§3); the **validation-debt line** is in Layer 1 and the pack reads as "test this messaging/channel," never "this will work" (§4); on hand-off, the run asked what of the upstream artifact's debt is now validated and carried the rest forward (§4c); Deep mode met the **evidence floor + self-critic loop** and used the **direct-web + Evidence Pack fallback** (§6).
 
 ---
 
@@ -450,7 +450,7 @@ Wave 0 (background from start):
   [REVIEWS] Review-language mining — fetch reviews of the competitors/alternatives (G2, Reddit, Product Hunt,
             Trustpilot, Capterra, App Store). Extract the words customers actually use, their specific Problems
             with the current Solution, and 5–10 quotable lines per competitor WITH source URLs. → returns the review language in-message.
-            Must meet the evidence floor (a real minimum of distinct sources, or report why fewer); use the web-MCP fallback when the built-in fetch is blocked (see "Deep-mode QA" below).
+            Must meet the evidence floor (a real minimum of distinct sources); if direct web cannot reach it after retries, stop and request an Evidence Pack (see "Deep-mode QA" below).
 Wave 1 (parallel, consume the reviews return):
   [LAND]    Landing-copy writer → returns Part 1 in-message
   [ADS]     Ad/creative writer → returns Part 2 in-message
@@ -463,16 +463,11 @@ Each writer agent reads only its canon slice (Landing → core + customers-atten
 
 Web caps: review mining ≤12 fetches / ~10 min. Source links mandatory (Rule 2); never invent sources, figures, or fake reviews.
 
-### Deep-mode QA — evidence floor + self-critic loop + web-MCP fallback (`PRODUCER-CONTRACT.md §6`)
+### Deep-mode QA — evidence floor + self-critic loop + Evidence Pack fallback (`PRODUCER-CONTRACT.md §6`)
 
-- **Evidence floor (not just a ceiling).** The cap is a ceiling; treat the lower bound as a **floor**. The review-mining leg may not return "done" until it has either pulled a real minimum of distinct sources (a spread across competitors/alternatives, with quotable lines + source URLs) **or** explicitly reported *why* fewer were possible (blocked, none exist). "Did two queries and stopped" is a failure state, not a completion — the customer's actual words are the whole point of Deep mode, and thin mining produces generic copy.
+- **Evidence floor (not just a ceiling).** The cap is a ceiling; treat the lower bound as a **floor**. The review-mining leg may not return "done" until it has either pulled a real minimum of distinct sources (a spread across competitors/alternatives, with quotable lines + source URLs). If it cannot reach that minimum after the retry loop, it must stop and request an Evidence Pack per `PRODUCER-CONTRACT.md §6`. "Did two queries and stopped" is a failure state, not a completion — the customer's actual words are the whole point of Deep mode, and thin mining produces generic copy.
 - **Self-critic loop per leg.** After a research/writer leg returns, run a short critic pass asking: *enough distinct review sources? is each customer-language claim actually traceable to a fetched source (not invented)? any methodology error (Big-Job-as-segment, features-before-criteria, adjectives that fail "as in?", a Big Job promised the product only partially performs)? gaps left?* If it fails, re-run the leg with the gap named — **up to 2 extra rounds**. Don't ship a leg that failed its own critic.
-- **Web-MCP fallback.** When the built-in fetch is blocked or thin on a needed review source (G2, Capterra, Trustpilot, App Store), tell the user once and use a web-research MCP if available:
-
-  > Some review sources (e.g., G2, Capterra) block the built-in fetch. For fuller Deep mining, enable a web-research MCP — [Firecrawl](https://www.firecrawl.dev/) or [Exa](https://exa.ai/) (both ship MCP servers) — and I'll use it. Without it, I'll note where review coverage was thin and the copy leans more on reasoning than on real customer language.
-
-  If such an MCP is connected (discoverable via tool search), prefer it for blocked sources; otherwise proceed and flag thin coverage in the self-critic / verification notes.
-
+- **Direct-web + Evidence Pack fallback.** Use direct Codex web access first. If it remains blocked or thin after the retry loop and the evidence floor is unmet, stop that external-research leg and follow `PRODUCER-CONTRACT.md §6(c–e)`: list the exact missing evidence, facts/source types to research, and required Evidence Pack format; ask the user to attach the pack in this chat; resume the same Deep workflow when it arrives. Never recommend MCP/Firecrawl/Exa, invent missing facts, proceed on thin coverage, or label the output Deep. If the user declines an Evidence Pack, offer an explicit switch to Quick.
 ---
 
 ## What this skill does NOT do
