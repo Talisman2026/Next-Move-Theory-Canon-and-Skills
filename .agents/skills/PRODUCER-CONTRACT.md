@@ -1,8 +1,7 @@
 # Producer contract — six cross-cutting behaviors (binding for all producer skills)
 
-> The four producer skills (`nmt-market-research`, `nmt-craft-value-proposition`, `nmt-product-requirements`,
-> `nmt-craft-go-to-market`) share six behaviors that came directly from user testing feedback.
-> Specifying them once here keeps the four skills in sync. Each skill points to this file and wires the
+> Producer skills that bind this contract share six behaviors that came directly from user testing feedback.
+> Specifying them once here keeps the skills in sync. Each skill points to this file and wires the
 > concrete hooks (intake questions, template blocks) into its own flow. The companion file
 > `READABILITY-CONTRACT.md` governs the 3-layer output; this file governs intake + framing + integrity.
 
@@ -20,6 +19,39 @@ This section is a Codex-only override in the `Skills/codex` / installed `.agents
 - If `request_user_input` is unavailable in the current Codex mode, ask the same questions directly in chat and wait for the user. Do not silently skip intake.
 - The root Codex agent asks interactive questions before spawning subagents. Subagents should not call root-only interactive tools.
 - Treat references to tool names such as Read, WebFetch, WebSearch, Write, and Agent as capability requirements, not literal tool names. Use equivalent available Codex tools. If subagents are unavailable, perform the same work sequentially.
+
+### PRE-INTAKE HARD GATE (Codex execution gate)
+
+This gate is binding for every skill that points to this contract. It is an execution barrier, not a suggestion.
+
+Before **any** substantive analysis, canon loading beyond what is needed to render the orientation, subagent spawn, web research, shell research, report drafting, file write, git commit, or PR action, the root agent must have the following five states resolved:
+
+1. `orientation_emitted = true` — the helicopter-view has been printed in chat.
+2. `language_resolved = true` — the document language has been explicitly chosen or explicitly supplied by the user.
+3. `mode_resolved = true` — Quick or Deep has been explicitly chosen or explicitly supplied by the user.
+4. `format_resolved = true` — Markdown or HTML has been explicitly chosen or explicitly supplied by the user.
+5. `output_path_resolved = true` — the default path has been explicitly accepted, or a custom path has been supplied.
+
+If **any** state is unresolved, stop and ask only the missing intake question(s). Do not infer the missing choice from convenience, from the language of the user's message, from a recommended default, or from prior runs unless the user explicitly supplied that choice in the current run.
+
+The **first assistant response** after a producer-skill invocation must therefore begin with the helicopter-view. It may then ask the unresolved intake questions. It must not contain a verdict, segment synthesis, research findings, artifact path, file write, commit, or PR result.
+
+If the user's opening message already supplies one or more of the five choices, mark only those supplied choices resolved; still emit the helicopter-view before doing any substantive work. If all five choices are already supplied, the gate may pass immediately after the helicopter-view.
+
+After the five cross-cutting states are resolved, continue the skill-specific intake. A skill-specific required question can impose an additional gate; this central gate does not authorize skipping it.
+
+**Pre-intake self-check before work starts:**
+
+```text
+PRE-INTAKE GATE
+orientation_emitted: PASS/FAIL
+language_resolved: PASS/FAIL
+mode_resolved: PASS/FAIL
+format_resolved: PASS/FAIL
+output_path_resolved: PASS/FAIL
+```
+
+Keep this check in working context; it does not need to be printed to the user unless a gate fails unexpectedly. Any `FAIL` means **no analysis / no write / no commit**.
 
 1. **Helicopter-view first** — orient the user before the first question.
 2. **Output format choice** — Markdown (fast) or HTML (easier to read).
@@ -174,6 +206,7 @@ A textual PASS without the supporting evidence or completed stage does not count
 
 A producer skill satisfies this contract when:
 
+- [ ] It enforces the **PRE-INTAKE HARD GATE** before any substantive work: orientation, language, mode, format, and output path are all resolved.
 - [ ] It prints the **helicopter-view** block before the first intake question (§1).
 - [ ] Its intake batch includes the **output-format** question (§2) and the **output-path** question (§5).
 - [ ] If HTML is chosen, it writes one self-contained `.html` with working anchors + `<details>` (§2).
