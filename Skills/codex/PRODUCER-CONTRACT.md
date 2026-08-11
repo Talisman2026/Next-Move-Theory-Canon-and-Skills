@@ -24,7 +24,9 @@ This section is a Codex-only override in the `Skills/codex` / installed `.agents
 
 This gate is binding for every skill that points to this contract. It is an execution barrier, not a suggestion.
 
-Before **any** substantive analysis, canon loading beyond what is needed to render the orientation, subagent spawn, web research, shell research, report drafting, file write, git commit, or PR action, the root agent must have the following five states resolved:
+**Precedence rule.** This gate overrides any conflicting local wording inside an individual Codex producer skill. In particular, local instructions such as **“ask intake depth first,” “ask the business task first,” “ask the input route first,” “Default English,” or “if the user writes in another language, offer to continue in it” do not authorize a skill-specific question or an inferred/defaulted language before this gate passes.** Treat those local instructions as applying only *after* the five cross-cutting states below are resolved. If a local skill and this gate disagree about ordering, **this gate wins**.
+
+Before **any** substantive analysis, canon loading beyond what is needed to render the orientation, skill-specific intake question, upstream-artifact read, subagent spawn, web research, shell research, report drafting, file write, git commit, or PR action, the root agent must have the following five states resolved:
 
 1. `orientation_emitted = true` — the helicopter-view has been printed in chat.
 2. `language_resolved = true` — the document language has been explicitly chosen or explicitly supplied by the user.
@@ -32,13 +34,15 @@ Before **any** substantive analysis, canon loading beyond what is needed to rend
 4. `format_resolved = true` — Markdown or HTML has been explicitly chosen or explicitly supplied by the user.
 5. `output_path_resolved = true` — the default path has been explicitly accepted, or a custom path has been supplied.
 
-If **any** state is unresolved, stop and ask only the missing intake question(s). Do not infer the missing choice from convenience, from the language of the user's message, from a recommended default, or from prior runs unless the user explicitly supplied that choice in the current run.
+If **any** state is unresolved, stop and ask only the missing cross-cutting intake question(s). Do not infer the missing choice from convenience, from the language of the user's message, from a recommended default, from a local skill's “default” wording, or from prior runs unless the user explicitly supplied that choice in the current run.
 
-The **first assistant response** after a producer-skill invocation must therefore begin with the helicopter-view. It may then ask the unresolved intake questions. It must not contain a verdict, segment synthesis, research findings, artifact path, file write, commit, or PR result.
+**Language is never silently resolved.** A skill may recommend English or the user's language, but `language_resolved = PASS` only after the user explicitly chooses/supplies the language in this run. The language used in the user's message is a clue for which option to offer, not permission to infer the answer.
+
+The **first assistant response** after a producer-skill invocation must therefore begin with the helicopter-view. It may then ask the unresolved cross-cutting questions. It must not contain a skill-specific intake question, verdict, segment synthesis, research findings, artifact path, file write, commit, or PR result while any of the five states is unresolved.
 
 If the user's opening message already supplies one or more of the five choices, mark only those supplied choices resolved; still emit the helicopter-view before doing any substantive work. If all five choices are already supplied, the gate may pass immediately after the helicopter-view.
 
-After the five cross-cutting states are resolved, continue the skill-specific intake. A skill-specific required question can impose an additional gate; this central gate does not authorize skipping it.
+After the five cross-cutting states are resolved, continue the skill-specific intake (intake depth, business task, input route, product questions, materials, hand-off debt, etc.). A skill-specific required question can impose an additional gate; this central gate does not authorize skipping it.
 
 **Pre-intake self-check before work starts:**
 
@@ -51,7 +55,7 @@ format_resolved: PASS/FAIL
 output_path_resolved: PASS/FAIL
 ```
 
-Keep this check in working context; it does not need to be printed to the user unless a gate fails unexpectedly. Any `FAIL` means **no analysis / no write / no commit**.
+Keep this check in working context; it does not need to be printed to the user unless a gate fails unexpectedly. Any `FAIL` means **no skill-specific intake / no analysis / no write / no commit**.
 
 1. **Helicopter-view first** — orient the user before the first question.
 2. **Output format choice** — Markdown (fast) or HTML (easier to read).
@@ -65,7 +69,7 @@ Keep this check in working context; it does not need to be printed to the user u
 
 ## 1. Helicopter-view first (before the first intake question)
 
-The very first thing the skill prints — before STAGE 0 / the first `request_user_input` — is a short orientation block, in plain language, in the user's chosen document language. From user testing — *"I always ask Claude to first explain schematically what we'll do, then go deep. The skill jumps straight to 'describe your idea.'"*
+The very first thing the skill prints — before STAGE 0 / the first `request_user_input` — is a short orientation block, in plain language. If the document language is not yet resolved, use the language of the user's message only for this orientation and for asking the language question; this does **not** resolve `language_resolved`.
 
 Keep it to ~8–12 lines:
 
@@ -76,11 +80,11 @@ Keep it to ~8–12 lines:
 - **Rough cost** — a ballpark of time and token usage so the user can choose a model (Quick: light; Deep: heavy — best on a top model with direct web access).
 - **One honest caveat** — *"This speeds up the thinking, not the proving. The numbers and segments are hypotheses until you check them in the field."*
 
-End with: *"Ready? First, a few questions."* → proceed to intake. Don't make the user read a wall — this is a map, not a manual.
+End with: *"Ready? First, a few questions."* → resolve the missing cross-cutting PRE-INTAKE states before any skill-specific intake. Don't make the user read a wall — this is a map, not a manual.
 
 ## 2. Output format choice — Markdown or HTML
 
-Ask once, in the intake batch (alongside mode). From user testing — *"reading walls of markdown is painful; give me HTML I can open in a browser."*
+Ask once, in the PRE-INTAKE controls (alongside mode and language if unresolved). From user testing — *"reading walls of markdown is painful; give me HTML I can open in a browser."*
 
 > **Output format** — **Markdown** (default; faster to generate; opens anywhere) · **HTML** (a bit slower to generate; easier to read — collapsible sections and working in-page navigation).
 
@@ -127,27 +131,45 @@ Two concrete obligations:
 
 From user testing — *"A PRD built in 20 minutes on guesses looks as convincing as one after 8 interviews. Print the debt."* And: *"`GO` reads to a founder as 'build it — 3 months'; by your own algorithm GO means 'go validate' — 8 interviews and a fake door."*
 
-Two changes:
-
 **(a) Validation-debt line in Layer 1** — one line, near the top of the answer:
 
 > **Validation debt:** this stands on **{N}** unvalidated assumptions — **{M}** of them fatal (would sink it if wrong). The fatal ones are the first things to check. [see them ▸](#l2-risks)
 
-N = count of risky assumptions in the RAT / risk table. M = those tagged "kills it if wrong." Count honestly; a Quick run on thin input has high debt — say so. This makes a fast artifact legibly fast, not falsely authoritative.
+N and M must be computed from the canonical validation-debt registry below, not typed independently.
+
+**Canonical validation-debt registry (single source of truth).** Every producer artifact that prints a validation-debt count must maintain one in-context registry before the final write. The registry includes **all still-open load-bearing assumptions** the artifact relies on — inherited upstream debt plus new assumptions introduced by the current skill.
+
+```text
+VALIDATION DEBT REGISTRY
+ID | assumption | source (inherited/new) | status | fatal? | evidence / validation method
+R1 | ...        | inherited             | open   | yes    | ...
+R2 | ...        | new                   | open   | no     | ...
+```
+
+Rules:
+- Give each open assumption one stable ID; do not count the same assumption twice because it appears in two sections.
+- `N` = number of unique registry rows with `status = open`.
+- `M` = number of those open rows with `fatal = yes`.
+- If the text says there are 5 fatal assumptions, the registry must contain 5 open rows marked fatal. A separate narrative list, CTA-risk list, channel-risk list, or inherited-debt list may not introduce a fifth fatal assumption without adding it to the registry.
+- When a user reports that an assumption was checked, retain its ID, record the validation method/result, and move it out of the open count rather than silently deleting its history.
+- New assumptions created by the current skill (for example GTM message/channel/CTA assumptions) are added to the same registry; they do not live in a second incompatible count.
+- Before writing Layer 1, recompute `N/M` from the registry and cross-check every “fatal,” “open,” and “validation debt” statement in the artifact against it. Any mismatch is a **write-blocking FAIL** until corrected.
+
+This makes a fast artifact legibly fast, not falsely authoritative, and prevents the “12 open / 5 fatal” problem where only four fatal assumptions are actually traceable.
 
 **(b) Verdict wording** — wherever a skill emits a `GO` verdict, write **`GO (to validation)`**, never bare `GO`. Keep `NARROW` and `PIVOT` as-is (they already read as "not yet building"). In Layer 1 add a half-line gloss the first time: *"GO (to validation) — the idea is worth the next step, which is checking it in the field, not building it yet."*
 
-**(c) Hand-off carries the debt.** When a skill hands off to the next in the chain (`$nmt-market-research` / `$nmt-analyze-interviews` → `$nmt-craft-value-proposition` → `$nmt-product-requirements` → `$nmt-craft-go-to-market`), the next skill **opens by asking what from the prior artifact's validation debt has since been checked**, and re-tags anything still unvalidated. Debt travels down the chain; it is not silently dropped.
+**(c) Hand-off carries the debt.** When a skill hands off to the next in the chain (`$nmt-market-research` / `$nmt-analyze-interviews` → `$nmt-craft-value-proposition` → `$nmt-product-requirements` → `$nmt-craft-go-to-market`), the next skill **opens by asking what from the prior artifact's validation debt has since been checked**, and re-tags anything still unvalidated. Preserve the upstream assumption IDs when possible; add current-skill assumptions as new IDs. Debt travels down the chain; it is not silently dropped.
 
 ## 5. Configurable output path
 
 From user testing: hard-coding `Skills-Results/{slug}/…` in the repo root breaks teams whose agent-ready repos keep research elsewhere (e.g., `*/docs/research`).
 
-Add to intake (one line, default is the current behavior — no friction for the common case):
+Add to the PRE-INTAKE controls (one line, default is the current behavior — no friction for the common case):
 
 > **Where to save the result** — default `Skills-Results/{project}/{skill}/…` · or give a folder / path convention to match your repo (e.g., `docs/research/`).
 
-If the user gives a path, write the single analytical result file there, keeping the same `{YYYY-MM-DD_HH-MM}_{product-slug}-{skill}-result.{md|html}` filename. If they skip, use the default. Never write more than one analytical result file regardless of location (Rule 4). The optional §7 handoff is generated only after approval and, by default, is emitted in chat rather than written to the repo.
+If the user gives a path, write the single analytical result file there, keeping the same `{YYYY-MM-DD_HH-MM}_{product-slug}-{skill}-result.{md|html}` filename. If they explicitly accept the default, use it. Never infer acceptance of the default from silence. Never write more than one analytical result file regardless of location (Rule 4). The optional §7 handoff is generated only after approval and, by default, is emitted in chat rather than written to the repo.
 
 ## 6. Deep-mode QA loop + Evidence Pack fallback
 
@@ -288,12 +310,12 @@ The handoff is valid only while it matches the last approved upstream state.
 
 A producer skill satisfies this contract when:
 
-- [ ] It enforces the **PRE-INTAKE HARD GATE** before any substantive work: orientation, language, mode, format, and output path are all resolved.
+- [ ] It enforces the **PRE-INTAKE HARD GATE** before any skill-specific intake or substantive work: orientation, language, mode, format, and output path are all resolved; local “ask X first” or “default language” wording never bypasses this gate.
 - [ ] It prints the **helicopter-view** block before the first intake question (§1).
-- [ ] Its intake batch includes the **output-format** question (§2) and the **output-path** question (§5).
+- [ ] Its PRE-INTAKE controls include **explicit language**, **mode**, **output format** (§2), and **output path** (§5), asking only whichever are not already supplied.
 - [ ] If HTML is chosen, it writes one self-contained `.html` with working anchors + `<details>` (§2).
 - [ ] Its template carries the **"What you told me — and the risks I see in it"** block, and its intake/self-critic enforces the input-as-hypothesis gate (§3).
-- [ ] Its Layer-1 template carries the **validation-debt line**, and every `GO` is **`GO (to validation)`** (§4).
+- [ ] Its Layer-1 template carries the **validation-debt line**, every `GO` is **`GO (to validation)`**, and `N/M` are recomputed from one canonical validation-debt registry with no mismatched side counts (§4).
 - [ ] On hand-off, it asks what validation debt has been retired since the prior artifact (§4c).
 - [ ] It never creates a final semantic handoff before explicit approval; after approval it offers the normal next-skill handoff, invalidates it after later revisions, and emits the approved semantic Markdown in the copy-ready §7 format.
 - [ ] Deep mode follows the **native web → retry/self-critic → read-only shell HTTP** ladder, enforces every evidence floor, runs the evidence-backed PRE-WRITE / PRE-COMMIT gate, and pauses for an attached **Evidence Pack** only when the full ladder cannot reach the floor (§6).

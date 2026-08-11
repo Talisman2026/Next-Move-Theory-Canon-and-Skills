@@ -109,6 +109,16 @@ Market with money
 
 **"Only we can find it" — the methodology's unique lens.** Flag prominently the findings a builder wouldn't see alone: a wrong segmentation cut (demographics mistaken for a segment), value below the success-criteria threshold, a Fake Job (future-intent no one paid for), a Previous/Next-Job growth move, a kill-a-Job opportunity, a symptom whose cause is two nodes upstream. These are the skill's reason to exist.
 
+### Confidence guardrail — Fake Job and ABCDX are evidence-backed labels, not clever guesses
+
+Two labels are especially easy for a diagnostic to overstate. Treat them as **conclusions with evidence requirements**, not as rhetorical shortcuts:
+
+- **Fake Job:** call a Job *Fake* only when the evidence actually shows the canon pattern — future/hypothetical intent **and** no past expenditure of money, time, or energy on that outcome. If the conversation simply has not surfaced past behavior yet, say **“Fake-Job risk / not enough past-behavior evidence”** and ask for a concrete past episode or route to interviews. Absence of evidence in a short chat is not evidence that the Job is Fake.
+- **ABCDX / A-segment:** do not say that an ABCDX result, A-segment, or ABCDX-based segmentation has been established unless ABCDX was actually run on the paying base with the required customer/economic evidence. A lightweight diagnostic question such as *“why do they stay?”* may generate a **segment hypothesis** or identify that ABCDX is needed; it does not become an ABCDX result by itself.
+- **User self-report alone does not upgrade either label to fact.** If the user says “these are our best customers” or “nobody has paid for this,” treat it as a claim until the relevant evidence is available. State the confidence and the cheapest verification step.
+
+If the evidence requirement is not met, the diagnosis may still route on the uncertainty (*“segment unknown → run ABCDX”*, *“possible Fake-Job risk → inspect past expenditure”*), but it must not present the label as a settled finding.
+
 **"I don't know" is a diagnosis, not a gap.** If the user can't say whether new users hit the Aha, or who their A-segment is, the constraint is often *no instrumentation / no segment definition* → the move is to go measure or research (run AJTBD customer interviews per the canon interview guide, or ABCDX the paying base).
 
 ---
@@ -222,7 +232,7 @@ Per `../PRODUCER-CONTRACT.md`, this chat-first skill applies the contract partia
 - **Job grammar, every time** (Rules 7, 8, 14). Jobs as `I want to + infinitive`, in quotes; name the level (Core / Big / Small / Micro); terms capitalized; in questions *to* customers use *task*, never *Job*.
 - **Diagnose before prescribing.** Don't answer a vague situation with a generic essay; establish the upstream anchors first, then route through the chain.
 - **Accept correction immediately** (Rule 17); don't defend a weak finding.
-- **Flag hypotheses.** Numbers and consequential recommendations are methodology-grounded hypotheses to validate, never facts.
+- **Flag hypotheses.** Numbers and consequential recommendations are methodology-grounded hypotheses to validate, never facts. The Fake-Job and ABCDX/A-segment labels additionally obey the evidence guardrail above.
 
 ---
 
@@ -235,10 +245,11 @@ Per `../PRODUCER-CONTRACT.md`, this chat-first skill applies the contract partia
 5. **Focus applied as priority, not as filter** — "tackle first" leads; the rest stay visible, ranked, as *next, not now*.
 6. **Methodology's unique findings flagged** — the non-obvious results surfaced prominently.
 7. **Segment reasoned by Jobs** — not a demographic; ABCDX invoked for live bases.
-8. **Local-vs-global named** — moves respect the user's appetite; a global move flagged founder/C-level only.
-9. **Everything is a hypothesis** — a cheapest validation step per major finding; never reads as certain truth.
-10. **Routed with a concrete handoff** — the first-move item points at exactly one next skill (or a short chain); you launch it.
-11. **≤15 questions, adaptive** — only goal-challenging + risk/growth-narrowing questions asked; "I don't know" turned into a diagnostic signal.
+8. **Fake Job / ABCDX confidence guarded** — Fake Job is categorical only with past-expenditure evidence showing the canon pattern; an A-segment/ABCDX result is categorical only if ABCDX was actually run on the paying base. Otherwise the output says hypothesis/risk/unknown and routes to the missing evidence.
+9. **Local-vs-global named** — moves respect the user's appetite; a global move flagged founder/C-level only.
+10. **Everything is a hypothesis** — a cheapest validation step per major finding; never reads as certain truth.
+11. **Routed with a concrete handoff** — the first-move item points at exactly one next skill (or a short chain); you launch it.
+12. **≤15 questions, adaptive** — only goal-challenging + risk/growth-narrowing questions asked; "I don't know" turned into a diagnostic signal.
 
 ---
 
