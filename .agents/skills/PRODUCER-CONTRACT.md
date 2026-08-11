@@ -1,11 +1,11 @@
-# Producer contract — six cross-cutting behaviors (binding for all producer skills)
+# Producer contract — seven cross-cutting behaviors (binding for all producer skills)
 
-> Producer skills that bind this contract share six behaviors that came directly from user testing feedback.
+> Producer skills that bind this contract share seven behaviors that came directly from user testing feedback.
 > Specifying them once here keeps the skills in sync. Each skill points to this file and wires the
 > concrete hooks (intake questions, template blocks) into its own flow. The companion file
 > `READABILITY-CONTRACT.md` governs the 3-layer output; this file governs intake + framing + integrity.
 
-The six behaviors:
+The seven behaviors:
 
 ## Codex interactive intake compatibility
 
@@ -59,6 +59,7 @@ Keep this check in working context; it does not need to be printed to the user u
 4. **Visible validation debt** — print how many unvalidated assumptions the artifact stands on; `GO` → `GO (to validation)`.
 5. **Configurable output path** — default `Skills-Results/…`, but accept the host repo's convention.
 6. **Deep-mode QA loop + Evidence Pack fallback** — Deep mode follows the native-web → retry/self-critic → read-only shell-HTTP ladder, must meet an evidence floor, and pauses for an attached external Evidence Pack only when that ladder cannot meet the floor.
+7. **Approved semantic Markdown handoff** — after the user explicitly approves the final artifact, offer a copy-ready semantic Markdown handoff for the next skill; never hand off a draft or silently create a stale second artifact.
 
 ---
 
@@ -85,13 +86,13 @@ Ask once, in the intake batch (alongside mode). From user testing — *"reading 
 
 **Both formats keep every link clickable** — source links (Rule 2) and the Layer-1→2→3 drill-down `▸` links. That's the answer to *"what about the links?"*: HTML doesn't lose them, it makes them nicer (real in-page anchors + sources opening in a new tab).
 
-If the user picks **HTML**, the single output file (Rule 4 — still exactly one file per run) is a **self-contained `.html`** with the **same** content as the Markdown version — identical attribution, disclaimers, the three layers, every table, every link — rendered as:
+If the user picks **HTML**, the single output file (Rule 4 — still exactly one analytical result file per run) is a **self-contained `.html`** with the **same** content as the Markdown version — identical attribution, disclaimers, the three layers, every table, every link — rendered as:
 
 - **Inline CSS only, no external dependencies** (opens offline, no network, no build step). A clean reading width (~720px), system font stack, comfortable line-height.
 - **Working navigation** — the "How to read this" jump links and every `▸` drill-down link are real in-page `href="#id"` anchors to matching `id="…"` targets. A small sticky top bar with *Level 1 · Level 2 · Level 3* jumps.
 - **Collapsible depth** — Layer 3 sections and every `▸ methodology trace` are `<details>` elements (Level 1–2 open by default; Level 3 collapsed) so the reader expands only what they want. This also answers a separate complaint about non-collapsible long content.
 - **Source links** open in a new tab (`target="_blank" rel="noopener"`).
-- Filename: same pattern as the Markdown file, with the `.html` extension. Do **not** also write the `.md` — one file per run.
+- Filename: same pattern as the Markdown file, with the `.html` extension. Do **not** also write the `.md` during the analytical run. The optional post-approval handoff in §7 is a separate export step and is never created before explicit approval.
 
 Build the HTML by rendering the finished content you would have written as Markdown — same layers, same anchors. Don't water it down for HTML; it is the same report in a more readable shell.
 
@@ -136,7 +137,7 @@ N = count of risky assumptions in the RAT / risk table. M = those tagged "kills 
 
 **(b) Verdict wording** — wherever a skill emits a `GO` verdict, write **`GO (to validation)`**, never bare `GO`. Keep `NARROW` and `PIVOT` as-is (they already read as "not yet building"). In Layer 1 add a half-line gloss the first time: *"GO (to validation) — the idea is worth the next step, which is checking it in the field, not building it yet."*
 
-**(c) Hand-off carries the debt.** When a skill hands off to the next in the chain (`$nmt-market-research` → `$nmt-craft-value-proposition` → `$nmt-product-requirements` → `$nmt-craft-go-to-market`), the next skill **opens by asking what from the prior artifact's validation debt has since been checked**, and re-tags anything still unvalidated. Debt travels down the chain; it is not silently dropped.
+**(c) Hand-off carries the debt.** When a skill hands off to the next in the chain (`$nmt-market-research` / `$nmt-analyze-interviews` → `$nmt-craft-value-proposition` → `$nmt-product-requirements` → `$nmt-craft-go-to-market`), the next skill **opens by asking what from the prior artifact's validation debt has since been checked**, and re-tags anything still unvalidated. Debt travels down the chain; it is not silently dropped.
 
 ## 5. Configurable output path
 
@@ -146,7 +147,7 @@ Add to intake (one line, default is the current behavior — no friction for the
 
 > **Where to save the result** — default `Skills-Results/{project}/{skill}/…` · or give a folder / path convention to match your repo (e.g., `docs/research/`).
 
-If the user gives a path, write the single result file there, keeping the same `{YYYY-MM-DD_HH-MM}_{product-slug}-{skill}-result.{md|html}` filename. If they skip, use the default. Never write more than one file regardless of location (Rule 4).
+If the user gives a path, write the single analytical result file there, keeping the same `{YYYY-MM-DD_HH-MM}_{product-slug}-{skill}-result.{md|html}` filename. If they skip, use the default. Never write more than one analytical result file regardless of location (Rule 4). The optional §7 handoff is generated only after approval and, by default, is emitted in chat rather than written to the repo.
 
 ## 6. Deep-mode QA loop + Evidence Pack fallback
 
@@ -200,6 +201,87 @@ A textual PASS without the supporting evidence or completed stage does not count
 
 **(f) Quick after an explicit switch.** Quick uses one honest sizing calculation with every assumption named. It never simulates Deep sizing with model-generated inputs, and never states unverified competitor, review, price, market, or regulatory claims as facts. Mark them as hypotheses/unverified and provide a verification path.
 
+## 7. Approved semantic Markdown handoff (post-approval only)
+
+The human-readable result and the machine handoff have different jobs. The result file is for review and discussion; the handoff is a transport snapshot for the next skill. **Never create the handoff from a draft.**
+
+### 7.1 Approval gate
+
+After the result file is delivered, let the user review it, ask questions, and request revisions. Treat the artifact as mutable until the user explicitly approves the current version.
+
+Track these working states:
+
+```text
+HANDOFF STATE
+artifact_approved: PASS/FAIL
+handoff_requested: PASS/FAIL
+handoff_fresh: PASS/FAIL
+```
+
+- `artifact_approved = PASS` only after an explicit approval of the current result (for example: "approved", "согласовано", "утверждаю", or an equally unambiguous answer to an approval question). Do not infer approval from silence, from the user asking a follow-up question, or merely from moving the discussion forward.
+- Before approval, do not generate, write, commit, or present a semantic handoff as final.
+- After explicit approval, **offer** the handoff for the normal next skill. Do not force it. If the same user message both approves the artifact and explicitly asks to move it to the next skill, that counts as `handoff_requested = PASS`; no redundant confirmation is needed.
+- Any substantive revision after approval immediately resets `artifact_approved = FAIL` and `handoff_fresh = FAIL`. Any previously emitted handoff is stale and must not be reused. Re-approval is required before regenerating it.
+
+Default next-skill routes:
+
+```text
+$nmt-market-research      → $nmt-craft-value-proposition
+$nmt-analyze-interviews   → $nmt-craft-value-proposition
+$nmt-craft-value-proposition → $nmt-product-requirements
+$nmt-product-requirements → $nmt-craft-go-to-market
+$nmt-craft-go-to-market   → terminal producer step unless the user names another workflow
+```
+
+When offering, use plain language, e.g.: *"If this result is approved and you're ready to continue, I can prepare the semantic Markdown handoff for `$nmt-product-requirements`."*
+
+### 7.2 What the handoff contains
+
+The handoff is **not a summary** and not a newly reasoned artifact. It is the final approved semantic content in Markdown, prepared for another skill to consume.
+
+Preserve all load-bearing information from the approved result, including where present:
+
+- selected segment / Jobs / criteria and their priority order;
+- user choices and challenge-the-build decisions;
+- evidence provenance, respondent/source support, confidence, coherence/saturation, and uncertainty labels;
+- validation debt, fatal assumptions, RATs, and what remains unverified;
+- selected value direction / offer / build and rejected or excluded alternatives that constrain the next step;
+- Critical Chain, Aha Moment, requirements or other skill-specific outputs needed downstream;
+- risks, out-of-scope boundaries, forbidden claims/actions, and next-step constraints;
+- named unknowns: missing information stays missing.
+
+Do **not** shorten for token savings, collapse evidence classes, promote hypotheses to facts, invent missing values, re-run analysis, or silently "improve" the approved decisions. The purpose is faithful transport, not optimization.
+
+If the approved result is HTML, generate the handoff from the **same final semantic Markdown content/state that the HTML represents**, not by mechanically scraping or stripping tags from HTML. Presentation-only material — CSS, HTML tags, navigation widgets, `<details>` scaffolding, decorative classes — is omitted. If the approved result is already Markdown, reuse its approved semantic content rather than rewriting it.
+
+### 7.3 Copy-ready transport format
+
+Because browser Codex may not accept Markdown/PDF document attachments, the default transport is **chat-first**. Emit the full handoff directly in chat between explicit boundaries so the user can copy it into a new task:
+
+```text
+NMT SEMANTIC HANDOFF
+source_skill: {skill}
+target_skill: {next skill}
+source_artifact: {final approved artifact path}
+approval_status: APPROVED
+
+--- BEGIN UPSTREAM ARTIFACT ---
+
+{full approved semantic Markdown}
+
+--- END UPSTREAM ARTIFACT ---
+```
+
+The boundary markers are part of the transport contract. The downstream task should be able to distinguish its new instructions from the upstream artifact.
+
+By default, **do not create a second repo file** just to transport the handoff. If the user explicitly asks to save the handoff as a `.md` file, treat that as a separate post-approval export action and write exactly the same content that was emitted in chat; do not create a divergent file version. Suggested filename: `{approved-result-basename}-handoff-to-{target-skill}.md`.
+
+### 7.4 Downstream consumption
+
+When a producer skill receives an `NMT SEMANTIC HANDOFF` block, treat the content between the boundaries as an upstream artifact after the PRE-INTAKE gate passes. Do not ask the user to re-describe information that is already present, do not re-derive upstream decisions, and do not inflate confidence. Ask only genuinely missing load-bearing questions plus the mandatory validation-debt question from §4(c): what has been checked since the approved upstream artifact, and what changed.
+
+The handoff is valid only while it matches the last approved upstream state.
+
 ---
 
 ## How each skill wires this in (integration checklist)
@@ -213,4 +295,5 @@ A producer skill satisfies this contract when:
 - [ ] Its template carries the **"What you told me — and the risks I see in it"** block, and its intake/self-critic enforces the input-as-hypothesis gate (§3).
 - [ ] Its Layer-1 template carries the **validation-debt line**, and every `GO` is **`GO (to validation)`** (§4).
 - [ ] On hand-off, it asks what validation debt has been retired since the prior artifact (§4c).
+- [ ] It never creates a final semantic handoff before explicit approval; after approval it offers the normal next-skill handoff, invalidates it after later revisions, and emits the approved semantic Markdown in the copy-ready §7 format.
 - [ ] Deep mode follows the **native web → retry/self-critic → read-only shell HTTP** ladder, enforces every evidence floor, runs the evidence-backed PRE-WRITE / PRE-COMMIT gate, and pauses for an attached **Evidence Pack** only when the full ladder cannot reach the floor (§6).
